@@ -22,7 +22,7 @@
                 <a class="nav-link" href="{% url 'Series:serie_list'%}">Series</a></li>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Sobre Mi</a>
+                <a class="nav-link" href="{% url 'Login:about_me' %}">Sobre Mi</a>
               </li>
     {% if user.is_authenticated %}
     <li class="nav-item">

@@ -30,6 +30,9 @@ class UserLogoutView(LogoutView):
 def perfil(request):
     return render(request, 'Login/perfil.html')
 
+def about_me(request):
+    return render(request, 'Login/about_me.html')
+
 
 @login_required
 def edit_profile(request):
@@ -42,3 +45,4 @@ def edit_profile(request):
         form = EditProfileForm(instance=request.user)
 
     return render(request, 'Login/perfil_edit.html', {'form': form})
+

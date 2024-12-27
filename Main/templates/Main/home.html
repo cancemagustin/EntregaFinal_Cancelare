@@ -9,22 +9,20 @@
         <div class="row">
             {% for serie in series %}
                 {% if forloop.first %}
-                    <!-- Para la primera serie, aplica una clase diferente -->
                     <div class="col-12 mb-4">
                         <div class="card p-4 shadow-lg bigger-card">
                             <h2 class="display-4">{{ forloop.counter }}. {{ serie.titulo }}</h2>
-                            <!-- Truncar descripción para la primera serie -->
-                            <p>{{ serie.descripcion|truncatewords:60 }}</p>  <!-- Muestra solo las primeras 20 palabras -->
+                            <p>{{ serie.descripcion|truncatewords:60 }}</p>  
                             <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-primary">Más Información</a>
                         </div>
                     </div>
                 {% else %}
-                    <!-- Para las demás series, aplica el tamaño estándar -->
                     <div class="col-md-6 mb-4">
                         <div class="card p-3">
                             <h2 class="h4">{{ forloop.counter }}. {{ serie.titulo }}</h2>
-                            <!-- Muestra la descripción completa para las demás series -->
+                            <p><strong><i>{{serie.genero}}</i></strong></p>
                             <p>{{ serie.descripcion|truncatewords:60 }}</p>
+                            
                             <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-primary">Más Información</a>
                         </div>
                     </div>
