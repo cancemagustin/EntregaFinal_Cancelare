@@ -1,0 +1,53 @@
+{% extends 'Main/base.html' %}
+
+{% block title_content %}
+    Bienvenido a los Resúmenes de Series
+{% endblock title_content %}
+
+{% block content %}
+    <div class="container mt-4">
+
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card shadow-lg p-4">
+                    <h2 class="display-4">1. Breaking Bad</h2>
+                    <p class="lead">Un profesor de química de secundaria, Walter White, se convierte en fabricante de metanfetaminas después de ser diagnosticado con cáncer de pulmón terminal. Junto con su antiguo alumno, Jesse Pinkman, crea un imperio de drogas mientras lucha con su moralidad y sus relaciones familiares.</p>
+                    <a href="{% url 'Series:serie_details' id=1 %}" class="btn btn-primary">Más Información</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h2 class="h4">2. Stranger Things</h2>
+                    <p>En el pequeño pueblo de Hawkins, Indiana, un niño desaparece misteriosamente. Mientras sus amigos lo buscan, descubren una serie de eventos extraños, incluyendo un mundo paralelo llamado "El Otro Lado" y una niña con poderes psíquicos.</p>
+                    <a href="{% url 'Series:serie_details' id=2 %}" class="btn btn-primary">Más Información</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h2 class="h4">3. Game of Thrones</h2>
+                    <p>En un reino ficticio de Westeros, diversas familias nobles luchan por el control del Trono de Hierro. La serie está llena de intrigas, traiciones, y criaturas mitológicas como dragones y caminantes blancos.</p>
+                    <a href="{% url 'Series:serie_details' id=3 %}" class="btn btn-primary">Más Información</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h2 class="h4">4. The Office</h2>
+                    <p>Una comedia sobre la vida diaria de los empleados de Dunder Mifflin, una empresa de papel. La serie está filmada en formato de falso documental, siguiendo las interacciones entre los excéntricos trabajadores y su inapropiado jefe, Michael Scott.</p>
+                    <a href="{% url 'Series:serie_details' id=4 %}" class="btn btn-primary">Más Información</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h2 class="h4">5. Friends</h2>
+                    <p>Un grupo de seis amigos vive en Nueva York y enfrenta las diversas pruebas de la vida adulta, desde el amor hasta el trabajo, todo mientras mantienen su amistad inquebrantable. La serie es un clásico de comedia y relaciones humanas.</p>
+                    <a href="{% url 'Series:serie_details' id=5 %}" class="btn btn-primary">Más Información</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}

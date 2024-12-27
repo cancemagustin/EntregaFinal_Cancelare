@@ -1,0 +1,16 @@
+{% extends 'Main/base.html' %}
+{% block title %}
+    Detalles
+{% endblock title %}
+{% block content_title %}
+    Detalle de {{serie.titulo}}
+{% endblock content_title %}
+
+{% block content %}
+    <h1>Detalles de la Serie: {{ serie.titulo }}</h1>
+    
+    <p><strong>Descripción:</strong> {{ serie.descripcion }}</p>
+    <p><strong>Género:</strong> {{ serie.genero }}</p>
+
+    <a href="{% url 'Series:serie_list' %}">Volver a la lista de series</a>
+{% endblock %}

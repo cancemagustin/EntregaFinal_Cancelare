@@ -1,0 +1,36 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block content_title %}
+    Login
+{% endblock content_title %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h4>Iniciar sesión</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {{ form.as_p }}
+                        
+                        <button type="submit" class="btn btn-primary w-100">Logear</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ request.META.HTTP_REFERER | default:'/' }}" class="text-decoration-none">Volver</a><br>
+                    <a href="{% url 'Login:register' %}" class="text-decoration-none">¿Crear una nueva cuenta?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

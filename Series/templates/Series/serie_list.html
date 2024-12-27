@@ -1,0 +1,32 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}
+    Lista de Series
+{% endblock title %}
+
+{% block content_title %}
+    Lista de Series
+{% endblock content_title %}
+
+{% block content %}
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Lista de Series</h1>
+
+    <!-- Botón para agregar una nueva serie -->
+    <a href="{% url 'Series:serie_create' %}" class="btn btn-success mb-4">Agregar Nueva Serie</a>
+
+    <!-- Formulario de búsqueda -->
+    <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex mb-4">
+      <input type="text" name="busqueda" placeholder="Buscar por título" value="{{ request.GET.busqueda }}" class="form-control me-2">
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    
+    {% for serie in serie %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-link text-decoration-none">{{ serie.titulo }}</a>
+    </li>
+    {% empty %}
+        <li class="list-group-item">No hay series disponibles.</li>
+    {% endfor %}
+
+{% endblock %}

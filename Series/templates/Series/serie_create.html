@@ -1,0 +1,51 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}
+    Crear
+{% endblock title %}
+
+{% block title_content %}
+    Crear nueva reseña
+{% endblock title_content %}
+
+{% block content %}
+    <!-- Mostrar mensaje si el usuario no está logueado -->
+    {% if messages %}
+      <div class="alert alert-danger">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Título -->
+        <div class="mb-4">
+            <label for="id_titulo" class="form-label">Título</label>
+            {{ form.titulo }}
+        </div>
+        
+        <!-- Descripción -->
+        <div class="mb-4">
+            <label for="id_descripcion" class="form-label">Descripción</label>
+            {{ form.descripcion }}
+        </div>
+        
+        <!-- Género -->
+        <div class="mb-4">
+            <label for="id_genero" class="form-label">Género</label>
+            {{ form.genero }}
+        </div>
+        
+        <!-- Espaciado entre los campos y los botones -->
+        <div class="mb-3"></div>
+
+        <!-- Botón de enviar con estilo Bootstrap -->
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        
+        <!-- Botón de cancelar con estilo Bootstrap -->
+        <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock content %}
