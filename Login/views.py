@@ -25,3 +25,6 @@ def register(request):
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('Main:home')
 
+def perfil(request):
+    return render(request, 'Login/perfil.html')
+

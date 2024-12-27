@@ -24,9 +24,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">Sobre Mi</a>
               </li>
-              {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'Login:perfil' %}">
             {% if user.avatar.imagen %}
                 <img src="{{user.avatar.imagen.url}}" alt="" class="rounded-circle" width="30" height="30">
             {% endif %}{{user.username}}
