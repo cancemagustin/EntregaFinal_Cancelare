@@ -5,40 +5,60 @@
 {% endblock title %}
 
 {% block title_content %}
-    Editar reseña
+    <h1 class="text-primary">Editar reseña</h1>
 {% endblock title_content %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
+    <div class="container mt-4">
+        <!-- Contenedor del formulario con tarjeta -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-        <div class="mb-4">
-            <label for="id_titulo" class="form-label">Título</label>
-            {{ form.titulo }}
-        </div>
-        
-        <div class="mb-4">
-            <label for="id_descripcion" class="form-label">Descripción</label>
-            {{ form.descripcion }}  
-        </div>
+                    <!-- Título -->
+                    <div class="mb-4">
+                        <label for="id_titulo" class="form-label">Título</label>
+                        {{ form.titulo }}
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <label for="id_descripcion" class="form-label">Descripción</label>
+                        {{ form.descripcion }}  
+                    </div>
 
-        <div class="mb-4">
-            <label for="id_genero" class="form-label">Género</label>
-            {{ form.genero }}
-        </div>
-        <div class="mb-4">
-            <label for="id_temporada" class="form-label">Temporada</label>
-            {{ form.temporada }}
-        </div>
-        <div class="mb-4">
-            <label for="id_temporada" class="form-label">Reparto</label>
-            {{ form.reparto }}
-        </div>
+                    <!-- Género -->
+                    <div class="mb-4">
+                        <label for="id_genero" class="form-label">Género</label>
+                        {{ form.genero }}
+                    </div>
 
-        <div class="mb-3"></div>
+                    <!-- Temporada -->
+                    <div class="mb-4">
+                        <label for="id_temporada" class="form-label">Temporada</label>
+                        {{ form.temporada }}
+                    </div>
 
-        <button type="submit" class="btn btn-primary">Enviar</button>
+                    <!-- Reparto -->
+                    <div class="mb-4">
+                        <label for="id_reparto" class="form-label">Reparto</label>
+                        {{ form.reparto }}
+                    </div>
 
-        <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+                    <!-- Imagen -->
+                    <div class="mb-4">
+                        <label for="id_imagen" class="form-label">Imagen</label>
+                        {{ form.imagen }}
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary w-45">Actualizar</button>
+                        <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary w-45">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

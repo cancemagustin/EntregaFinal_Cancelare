@@ -9,7 +9,7 @@ def index(request):
 
 def home(request):
     
-    series = Serie.objects.all()[:5]  
+    series = Serie.objects.all()[:7]  
     return render(request, 'Main/home.html', {'series': series})
 
 
