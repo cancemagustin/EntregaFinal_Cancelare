@@ -12,21 +12,30 @@
   <div class="container my-5">
     <h1 class="text-center mb-4">Lista de Series</h1>
 
-    <!-- Botón para agregar una nueva serie -->
     <a href="{% url 'Series:serie_create' %}" class="btn btn-success mb-4">Agregar Nueva Serie</a>
 
-    <!-- Formulario de búsqueda -->
     <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex mb-4">
       <input type="text" name="busqueda" placeholder="Buscar por título" value="{{ request.GET.busqueda }}" class="form-control me-2">
       <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
     
-    {% for serie in serie %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-link text-decoration-none">{{ serie.titulo }}</a>
-    </li>
-    {% empty %}
-        <li class="list-group-item">No hay series disponibles.</li>
-    {% endfor %}
+    <ul class="list-group">
+      {% for serie in serie %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+              <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-link text-decoration-none">{{ serie.titulo }}</a>
+              <p class="mb-0" style="color: black; padding-left: 15px;">{{ serie.genero }}</p>
+          </div>
+          <div class="btn-group" role="group">
+            <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-info btn-sm">Detalles</a>
+            <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm">Actualizar</a>
+            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            
+          </div>
+      </li>
+      {% empty %}
+          <li class="list-group-item">No hay series disponibles.</li>
+      {% endfor %}
+    </ul>
 
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2>¿Estás seguro de que quieres eliminar la serie "{{ serie.titulo }}"?</h2>
+    
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+      <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}
