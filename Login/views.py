@@ -7,6 +7,7 @@ from .forms import CustomUserCreationForm, EditProfileForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 
 class UserLoginView(LoginView):
@@ -46,3 +47,8 @@ def edit_profile(request):
 
     return render(request, 'Login/perfil_edit.html', {'form': form})
 
+
+def mi_vista(request):
+    return render(request, 'Login/perfil.html', {
+        'MEDIA_URL': settings.MEDIA_URL
+    })
