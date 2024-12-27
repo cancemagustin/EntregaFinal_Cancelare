@@ -10,52 +10,43 @@
 
 {% block content %}
     <div class="container mt-4">
-        <!-- Contenedor del formulario con tarjeta -->
         <div class="card shadow-sm">
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <!-- Título -->
                     <div class="mb-4">
                         <label for="id_titulo" class="form-label">Título</label>
                         {{ form.titulo }}
                     </div>
                     
-                    <!-- Descripción -->
                     <div class="mb-4">
                         <label for="id_descripcion" class="form-label">Descripción</label>
                         {{ form.descripcion }}  
                     </div>
 
-                    <!-- Género -->
                     <div class="mb-4">
                         <label for="id_genero" class="form-label">Género</label>
                         {{ form.genero }}
                     </div>
 
-                    <!-- Temporada -->
                     <div class="mb-4">
                         <label for="id_temporada" class="form-label">Temporada</label>
                         {{ form.temporada }}
                     </div>
 
-                    <!-- Reparto -->
                     <div class="mb-4">
                         <label for="id_reparto" class="form-label">Reparto</label>
                         {{ form.reparto }}
                     </div>
-
-                    <!-- Imagen -->
                     <div class="mb-4">
                         <label for="id_imagen" class="form-label">Imagen</label>
                         {{ form.imagen }}
                     </div>
 
-                    <!-- Botones -->
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary w-45">Actualizar</button>
-                        <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary w-45">Cancelar</a>
+                        <a href="{{ request.META.HTTP_REFERER|default:'' }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

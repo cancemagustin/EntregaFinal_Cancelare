@@ -15,7 +15,6 @@
 
 {% block content %}
     <div class="container">
-        <!-- Contenedor principal con márgenes y borde redondeado -->
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <p><strong>Descripción:</strong> {{ serie.descripcion }}</p>
@@ -23,7 +22,6 @@
                 <p><strong>Temporadas:</strong> {{ serie.temporada }}</p>
                 <p><strong>Reparto:</strong> {{ serie.reparto }}</p>
                 
-                <!-- Imagen de la serie -->
                 {% if serie.imagen %}
                     <div class="mt-4">
                         <strong>Imagen:</strong>
@@ -35,7 +33,7 @@
             </div>
         </div>
 
-        <!-- Botón para volver a la lista -->
-        <a href="{% url 'Series:serie_list' %}" class="btn btn-secondary">Volver a la lista de series</a>
+        <a href="{{ request.META.HTTP_REFERER|default:'' }}" class="btn btn-secondary">Volver</a>
+
     </div>
 {% endblock %}

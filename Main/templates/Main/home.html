@@ -8,10 +8,9 @@
     <div class="container mt-4">
         <div class="row">
             {% for serie in series %}
-                <!-- Contenedor para cada post -->
                 <div class="col-md-12 mb-4">
                     <div class="d-flex border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                        <!-- Imagen con borde, altura duplicada -->
+
                         <div style="width: 50%; padding-right: 15px;">
                             {% if serie.imagen %}
                                 <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; height: 400px; width: 100%; object-fit: cover;">
@@ -20,7 +19,6 @@
                             {% endif %}
                         </div>
 
-                        <!-- Contenido del posteo con fondo celeste claro y texto centrado -->
                         <div class="flex-grow-1" style="width: 50%; background-color: #f0f8ff; padding-left: 15px; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; height: 400px;">
                             <h2 class="h4">{{ forloop.counter }}. {{ serie.titulo }}</h2>
                             <p><strong><i>{{ serie.genero }}</i></strong></p>
