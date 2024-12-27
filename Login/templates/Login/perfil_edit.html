@@ -1,0 +1,16 @@
+{% extends 'Main/base.html' %}
+{% block title %}
+    Editar
+{% endblock title %}
+{% block content_title %}
+    Editar Perfil
+{% endblock content_title %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+    <a href="{% url 'Login:perfil' %}">Cancelar</a>
+{% endblock content %}
+

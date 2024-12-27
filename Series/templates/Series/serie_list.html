@@ -12,7 +12,9 @@
   <div class="container my-5">
     <h1 class="text-center mb-4">Lista de Series</h1>
 
-    <a href="{% url 'Series:serie_create' %}" class="btn btn-success mb-4">Agregar Nueva Serie</a>
+    <a href="{% url 'Series:serie_create' %}" class="btn btn-success mb-4">
+        Agregar Nueva Serie
+    </a>
 
     <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex mb-4">
       <input type="text" name="busqueda" placeholder="Buscar por título" value="{{ request.GET.busqueda }}" class="form-control me-2">
@@ -28,9 +30,10 @@
           </div>
           <div class="btn-group" role="group">
             <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-info btn-sm">Detalles</a>
-            <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm">Actualizar</a>
-            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm">Eliminar</a>
-            
+            {% if user.is_authenticated %}
+                <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm">Actualizar</a>
+                <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            {% endif %}
           </div>
       </li>
       {% empty %}

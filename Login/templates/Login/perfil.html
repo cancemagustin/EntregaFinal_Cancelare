@@ -8,8 +8,9 @@
 {% block content %}
     <div class="row">
         <div class="col-md-4 text-center">
-            <img src="https://via.placeholder.com/150" alt="Avatar" class="img-fluid rounded-circle">
+            <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}https://via.placeholder.com/150{% endif %}" alt="Avatar" class="img-fluid" style="width: 300px; height: 300px; border-radius: 50%;">
         </div>
+        
         
         <div class="col-md-8">
             <h3>Información del Usuario</h3>
@@ -30,15 +31,15 @@
                     </tr>
                     <tr>
                         <th>Biografía</th>
-                        <td>Desarrollador web y entusiasta de la tecnología.</td>
+                        <td>{{user.descripcion}}</td>
                     </tr>
                     <tr>
                         <th>Enlace</th>
-                        <td><a href="https://www.linkedin.com/in/juanperez">https://www.linkedin.com/in/juanperez</a></td>
+                        <td><a href="{{user.enlace}}">{{user.enlace}}</a></td>
                     </tr>
                     <tr>
                         <th>Fecha de Nacimiento</th>
-                        <td>15 de marzo de 1990</td>
+                        <td>{{user.cumpleanos}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -47,7 +48,7 @@
 
     <div class="row mt-4">
         <div class="col text-center">
-            <a href="#" class="btn btn-primary">Editar Perfil</a>
+            <a href="{% url 'Login:edit_profile' %}" class="btn btn-primary">Editar Perfil</a>
         </div>
     </div>
 

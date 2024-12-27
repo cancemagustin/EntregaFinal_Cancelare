@@ -26,10 +26,14 @@
               </li>
     {% if user.is_authenticated %}
     <li class="nav-item">
+        
         <a class="nav-link" href="{% url 'Login:perfil' %}">
-            {% if user.avatar.imagen %}
-                <img src="{{user.avatar.imagen.url}}" alt="" class="rounded-circle" width="30" height="30">
-            {% endif %}{{user.username}}
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle" width="30" height="30">
+            {% else %}
+                <img src="https://via.placeholder.com/30" alt="Avatar" class="rounded-circle" width="30" height="30">
+            {% endif %}
+            {{user.username}}
                     </a>
                 </li>
                 <li class="nav-item">
