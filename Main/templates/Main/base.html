@@ -39,15 +39,15 @@
                 <li class="nav-item">
                     <form action="{% url 'Login:logout' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        <button type="submit" class="nav-link btn btn-link">Salir</button>
                     </form>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Login:login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'Login:login' %}">Iniciar Sesión</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Login:register' %}">Signup</a>
+                    <a class="nav-link" href="{% url 'Login:register' %}">Registrar</a>
                 </li>
             {% endif %}
               
