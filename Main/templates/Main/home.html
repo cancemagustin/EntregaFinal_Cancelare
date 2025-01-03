@@ -4,12 +4,14 @@
     SERIES RECOMENDADAS
 {% endblock title_content %}
 
+<!--style="background-color: #616161;" -->
+
 {% block content %}
-    <div class="container mt-4">
+    <div class="container mt-4" >
         <div class="row">
             {% for serie in series %}
-                <div class="col-md-12 mb-4">
-                    <div class="d-flex border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <div class="col-md-12 mb-4" >
+                    <div class="d-flex border p-3 rounded"  style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
 
                         <div style="width: 50%; padding-right: 15px;">
                             {% if serie.imagen %}
@@ -19,11 +21,11 @@
                             {% endif %}
                         </div>
 
-                        <div class="flex-grow-1" style="width: 50%; background-color: #f0f8ff; padding-left: 15px; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; height: 400px;">
+                        <div class="flex-grow-1" style="width: 50%; padding-right: 15px;background-color: #f4f6f6; padding-left: 15px; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; height: 400px;">
                             <h2 class="h4">{{ forloop.counter }}. {{ serie.titulo }}</h2>
                             <p><strong><i>{{ serie.genero }}</i></strong></p>
                             <p>{{ serie.descripcion|truncatewords:60 }}</p>
-                            <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-primary">Más Detalles</a>
+                            <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn" style="background-color: #85929e; color: white;" >Más Detalles</a>
                         </div>
                     </div>
                 </div>
