@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse_lazy
-from .models import Serie
+from .models import Serie, SerieGuardada
 from .forms import SerieForm
 from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib import messages
 
-# Create your views here.
+
+from django.shortcuts import render
+from .models import Serie
+
+
+def is_superuser(user):
+    return user.is_superuser
 
 def serie_update(request, id):
     serie = Serie.objects.get(id=id)
@@ -38,6 +44,18 @@ class SerieListView(ListView):
         if busqueda:
             queryset = queryset.filter(titulo__icontains=busqueda)
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            # Obtener IDs de series guardadas por el usuario
+            context['series_guardadas_ids'] = list(
+                SerieGuardada.objects.filter(usuario=self.request.user).values_list('serie_id', flat=True)
+            )
+        else:
+            context['series_guardadas_ids'] = []
+        return context
+    
 
     
 class SerieDetailView(DetailView):
@@ -48,6 +66,7 @@ class SerieDetailView(DetailView):
     def get_object(self):
         return get_object_or_404(Serie, id=self.kwargs['id'])
     
+@user_passes_test(is_superuser)    
 @login_required  
 def serie_create(request):
     if request.method == "POST":
@@ -62,3 +81,21 @@ def serie_create(request):
         form = SerieForm()
     
     return render(request, 'Series/serie_create.html', {'form': form})
+
+@login_required
+def serie_save(request, id):
+    serie = get_object_or_404(Serie, id=id)
+    guardado = SerieGuardada.objects.filter(usuario=request.user, serie=serie)
+
+    if guardado.exists():
+        guardado.delete()
+        messages.success(request, "La serie ha sido desguardada.")
+    else:
+        SerieGuardada.objects.create(usuario=request.user, serie=serie)
+        messages.success(request, "La serie ha sido guardada.")
+
+    return redirect('Series:serie_list')
+
+def serie_saved_list(request):
+    series_guardadas = SerieGuardada.objects.filter(usuario=request.user)
+    return render(request, 'Series/serie_saved_list.html', {'series_guardadas': series_guardadas})

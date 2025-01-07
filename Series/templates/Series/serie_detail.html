@@ -7,7 +7,7 @@
 {% block title_content %}
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h1 class="text-primary">{{ serie.titulo }}</h1>
-        {% if user.is_authenticated %}
+        {% if user.is_superuser %}
             <a href="{% url 'Series:serie_update' serie.pk %}" class="btn btn-success">Editar</a>
         {% endif %}
     </div>

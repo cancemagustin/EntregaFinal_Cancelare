@@ -9,36 +9,75 @@
 {% endblock content_title %}
 
 {% block content %}
-  <div class="container my-5">
+<div class="container my-5">
     <h1 class="text-center mb-4">Lista de Series</h1>
 
-    <a href="{% url 'Series:serie_create' %}" class="btn btn-success mb-4">
-        Agregar Nueva Serie
-    </a>
+    <!-- Botón para agregar nueva serie -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex w-75">
+            <input type="text" name="busqueda" placeholder="Buscar por título o género" value="{{ request.GET.busqueda }}" 
+                   class="form-control me-2" style="border-radius: 20px; padding-left: 15px;">
+            <button type="submit" class="btn btn-primary" style="border-radius: 20px;">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </form>
+        <a href="{% url 'Series:serie_create' %}" class="btn btn-success" style="border-radius: 20px;">
+            <i class="bi bi-plus-circle"></i> Agregar Nueva Serie
+        </a>
+    </div>
 
-    <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex mb-4">
-      <input type="text" name="busqueda" placeholder="Buscar por título" value="{{ request.GET.busqueda }}" class="form-control me-2">
-      <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-    
-    <ul class="list-group">
-      {% for serie in serie %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-              <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-link text-decoration-none">{{ serie.titulo }}</a>
-              <p class="mb-0" style="color: black; padding-left: 15px;">{{ serie.genero }}</p>
-          </div>
-          <div class="btn-group" role="group">
-            <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-info btn-sm">Detalles</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm">Actualizar</a>
-                <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm">Eliminar</a>
-            {% endif %}
-          </div>
-      </li>
-      {% empty %}
-          <li class="list-group-item">No hay series disponibles.</li>
-      {% endfor %}
-    </ul>
+    <!-- Lista de series -->
+    <div class="row">
+        {% for serie in serie %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm" style="border-radius: 15px;">
+                {% if serie.imagen %}
+                    <img src="{{ serie.imagen.url }}" class="card-img-top" alt="Imagen de {{ serie.titulo }}" 
+                         style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center bg-light" 
+                         style="height: 200px; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <p class="text-muted">Sin imagen</p>
+                    </div>
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title text-dark">{{ serie.titulo }}</h5>
+                    <p class="card-text text-secondary">{{ serie.genero }}</p>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-sm" style="background-color: #6c757d ; color: white; border-radius: 20px;">
+                            Detalles
+                        </a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm" style="border-radius: 20px;">
+                                Actualizar
+                            </a>
+                            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm" style="border-radius: 20px;">
+                                Eliminar
+                            </a>
+                        {% else %}
+                            <form method="post" action="{% url 'Series:serie_save' id=serie.id %}" class="d-inline">
+                                {% csrf_token %}
+                                {% if serie.id in series_guardadas_ids %}
+                                    <button type="submit" class="btn btn-sm" style="border-radius: 20px;background-color: #adb5bd ; color: white;">
+                                        Desguardar
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 20px;">
+                                        Guardar
+                                    </button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">No hay series disponibles.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
 
-{% endblock %}

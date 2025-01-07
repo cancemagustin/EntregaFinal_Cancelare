@@ -4,32 +4,384 @@
     SERIES RECOMENDADAS
 {% endblock title_content %}
 
-<!--style="background-color: #616161;" -->
-
 {% block content %}
-    <div class="container mt-4" >
-        <div class="row">
-            {% for serie in series %}
-                <div class="col-md-12 mb-4" >
-                    <div class="d-flex border p-3 rounded"  style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
 
-                        <div style="width: 50%; padding-right: 15px;">
-                            {% if serie.imagen %}
-                                <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; height: 400px; width: 100%; object-fit: cover;">
-                            {% else %}
-                                <p>No hay imagen disponible.</p>
-                            {% endif %}
+<style>
+    /* Ocultar barra de desplazamiento en navegadores modernos */
+.d-flex.overflow-auto {
+    overflow: hidden; /* Evita mostrar la barra de desplazamiento */
+}
+
+/* Permitir el desplazamiento con scroll interno */
+.d-flex.overflow-auto::-webkit-scrollbar {
+    display: none; /* Oculta la barra en navegadores basados en WebKit */
+}
+.scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.scroll-button.left {
+    left: 0;
+}
+
+.scroll-button.right {
+    right: 0;
+}
+
+.scroll-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+</style>
+<script>
+    function scrollContent(direction, containerId) {
+        const container = document.getElementById(containerId);
+        const scrollAmount = 300; // Cambia este valor según tus necesidades
+        if (direction === 'left') {
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+    </script>
+    
+
+
+    <style>
+        /* Ocultar barra de desplazamiento en navegadores modernos */
+    .d-flex.overflow-auto {
+        overflow: hidden; /* Evita mostrar la barra de desplazamiento */
+    }
+    
+    /* Permitir el desplazamiento con scroll interno */
+    .d-flex.overflow-auto::-webkit-scrollbar {
+        display: none; /* Oculta la barra en navegadores basados en WebKit */
+    }
+    .scroll-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+    }
+    
+    .scroll-button.left {
+        left: 0;
+    }
+    
+    .scroll-button.right {
+        right: 0;
+    }
+    
+    .scroll-button:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    </style>
+    <script>
+        function scrollContent(direction, containerId) {
+            const container = document.getElementById(containerId);
+            const scrollAmount = 300; // Cambia este valor según tus necesidades
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+        </script>
+        
+    
+    <div class="container mt-1">
+        <h1>Comedia</h1>
+        <div class="position-relative">
+            {% if series|length > 4 %}
+                <button class="scroll-button left" onclick="scrollContent('left', 'comedia')">&lt;</button>
+            {% endif %}
+            
+            <div id="comedia" class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+                {% for serie in series %}
+                    {% if "Comedia" in serie.genero|stringformat:"s" %}
+                        <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                            <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                                <div class="mb-3" style="flex-grow: 1;">
+                                    {% if serie.imagen %}
+                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                    {% else %}
+                                        <p>No hay imagen disponible.</p>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                    <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                    <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="flex-grow-1" style="width: 50%; padding-right: 15px;background-color: #f4f6f6; padding-left: 15px; border-radius: 5px; display: flex; flex-direction: column; justify-content: center; height: 400px;">
-                            <h2 class="h4">{{ forloop.counter }}. {{ serie.titulo }}</h2>
-                            <p><strong><i>{{ serie.genero }}</i></strong></p>
-                            <p>{{ serie.descripcion|truncatewords:60 }}</p>
-                            <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn" style="background-color: #85929e; color: white;" >Más Detalles</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <button class="scroll-button right" onclick="scrollContent('right', 'comedia')">&gt;</button>
+        </div>
+    </div>
+        <div class="container mt-1">
+            <h1>Drama</h1>
+            <div class="position-relative">
+                <button class="scroll-button left" onclick="scrollContent('left', 'Drama')">&lt;</button>
+                <div id="Drama" class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+                    {% for serie in series %}
+                        {% if "Drama" in serie.genero|stringformat:"s" %}
+                            <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                                <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                                    <div class="mb-3" style="flex-grow: 1;">
+                                        {% if serie.imagen %}
+                                            <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                        {% else %}
+                                            <p>No hay imagen disponible.</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                        <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                        <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <button class="scroll-button right" onclick="scrollContent('right', 'Drama')">&gt;</button>
+            </div>
+        </div>
+    <div class="container mt-1">
+        <h1>Acción</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Acción" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
+    <div class="container mt-1">
+        <h1>Terror</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Terror" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Ciencia Ficción</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Ciencia Ficción" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Romance</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Romance" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Documental</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Documental" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Fantasia</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Fantasía" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Misterio</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Misterio" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Aventura</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Aventura" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-1">
+        <h1>Política</h1>
+        <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {% for serie in series %}
+                {% if "Política" in serie.genero|stringformat:"s" %}
+                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
+                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
+                            <div class="mb-3" style="flex-grow: 1;">
+                                {% if serie.imagen %}
+                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
+                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
 {% endblock content %}

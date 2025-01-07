@@ -12,6 +12,9 @@ urlpatterns = [
     path('serie/create',views.serie_create, name="serie_create"),
     path('serie/update/<int:id>/', views.serie_update, name='serie_update'),
     path('serie/delete/<int:id>/', views.serie_delete, name='serie_delete'),
+    path('serie/save/<int:id>/', views.serie_save, name='serie_save'),
+    path('saved/', views.serie_saved_list, name='serie_saved_list'),
+
 
 
 ]
