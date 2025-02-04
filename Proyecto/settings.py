@@ -132,3 +132,4 @@ LOGIN_REDIRECT_URL = 'Main:home'
 LOGOUT_REDIRECT_URL = 'Main:home'
 LOGIN_URL = 'Login:login'
 AUTH_USER_MODEL = 'Login.CustomUser'
+STATICFILES_DIRS = [BASE_DIR / "static"]
