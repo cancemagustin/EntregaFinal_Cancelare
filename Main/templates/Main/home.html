@@ -16,6 +16,10 @@
 .d-flex.overflow-auto::-webkit-scrollbar {
     display: none; /* Oculta la barra en navegadores basados en WebKit */
 }
+.series-title {
+    color: white;
+}
+
 .scroll-button {
     position: absolute;
     top: 50%;
@@ -67,6 +71,9 @@
     .d-flex.overflow-auto::-webkit-scrollbar {
         display: none; /* Oculta la barra en navegadores basados en WebKit */
     }
+    .genero_tittle{
+        color: white;
+    }
     .scroll-button {
         position: absolute;
         top: 50%;
@@ -74,7 +81,7 @@
         width: 40px;
         height: 40px;
         border: none;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(87, 77, 77, 0.5);
         color: white;
         border-radius: 50%;
         cursor: pointer;
@@ -108,7 +115,7 @@
         
     
     <div class="container mt-1">
-        <h1>Comedia</h1>
+        <h1 class="genero_tittle">Comedia</h1>
         <div class="position-relative">
             {% if series|length > 4 %}
                 <button class="scroll-button left" onclick="scrollContent('left', 'comedia')">&lt;</button>
@@ -117,19 +124,17 @@
             <div id="comedia" class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
                 {% for serie in series %}
                     {% if "Comedia" in serie.genero|stringformat:"s" %}
-                        <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
-                            <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 420px;">
-                                <div class="mb-3" style="flex-grow: 1;">
+                        <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start; background-color: rgb(44, 44, 44); border-radius: 40px; padding: 20px;">
+                            <div class="d-flex flex-column align-items-center justify-content-between" style="box-shadow: 0 4px 8px rgba(158, 50, 50, 0.1); height: 370px;">
+                                <div class="mb-3" style="flex-grow: 1; text-align: center;">
                                     {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 40px; width: 100%; height: 250px; object-fit: cover;">
                                     {% else %}
-                                        <p>No hay imagen disponible.</p>
+                                        <p style="color: white;">No hay imagen disponible.</p>
                                     {% endif %}
                                 </div>
-                                <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                    <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
-                                    <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
-                                </div>
+                                <h2 class="h3 text-center series-title" style="color: white; flex-grow: 1; display: flex;   text-align: center;">{{ serie.titulo }}</h2>
+                                <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white; margin-top: auto;">Más Detalles</a>
                             </div>
                         </div>
                     {% endif %}
@@ -139,7 +144,7 @@
         </div>
     </div>
         <div class="container mt-1">
-            <h1>Drama</h1>
+            <h1 class="genero_tittle">Drama</h1>
             <div class="position-relative">
                 <button class="scroll-button left" onclick="scrollContent('left', 'Drama')">&lt;</button>
                 <div id="Drama" class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
@@ -155,7 +160,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                        <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                        <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
                                         <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                                     </div>
                                 </div>
@@ -167,7 +172,7 @@
             </div>
         </div>
     <div class="container mt-1">
-        <h1>Acción</h1>
+        <h1 class="genero_tittle">Acción</h1>
         <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
             {% for serie in series %}
                 {% if "Acción" in serie.genero|stringformat:"s" %}
@@ -181,7 +186,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -191,7 +197,7 @@
         </div>
     </div>
     <div class="container mt-1">
-        <h1>Terror</h1>
+        <h1 class="genero_tittle">Terror</h1>
         <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
             {% for serie in series %}
                 {% if "Terror" in serie.genero|stringformat:"s" %}
@@ -205,7 +211,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -215,7 +222,7 @@
         </div>
     </div>
     <div class="container mt-1">
-        <h1>Ciencia Ficción</h1>
+        <h1 class="genero_tittle">Ciencia Ficción</h1>
         <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
             {% for serie in series %}
                 {% if "Ciencia Ficción" in serie.genero|stringformat:"s" %}
@@ -229,7 +236,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -253,7 +261,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -277,7 +286,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -301,7 +311,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -325,7 +336,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -349,7 +361,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
@@ -373,7 +386,8 @@
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ serie.titulo }}</h2>
+                                <h2 class="h3 text-center mb-1 series-title">{{ serie.titulo }}</h2>
+
                                 <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn mx-auto" style="background-color: #495057; color: white;">Más Detalles</a>
                             </div>
                         </div>
