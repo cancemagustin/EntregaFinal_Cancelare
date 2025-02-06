@@ -9,6 +9,7 @@ def index(request):
 
 def home(request):
     series = Serie.objects.all() 
+    series = series.order_by('?')
     ultimas_5_series = Serie.objects.all().order_by('-fecha_lanzamiento')[:5] 
     return render(request, 'Main/home.html', {'series': series, 'ultimas_5_series': ultimas_5_series})
 

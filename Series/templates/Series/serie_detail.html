@@ -1,19 +1,40 @@
-{% extends 'Main/base.html' %}
 
+{% extends 'Main/base.html' %}
+{% load static %}
+{% get_media_prefix as media_url %}
 {% block title %}
     Detalles
 {% endblock title %}
 
-{% block title_content %}
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h1 class="text-primary">{{ serie.titulo }}</h1>
-        {% if user.is_superuser %}
-            <a href="{% url 'Series:serie_update' serie.pk %}" class="btn btn-success">Editar</a>
-        {% endif %}
-    </div>
-{% endblock title_content %}
+<style>
+body {
+    position: relative;
+    min-height: 100vh;
+}
+
+.logo_series {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Ajusta la posición */
+}
+
+</style>
 
 {% block content %}
+    <div class="logo_series">
+        <img src="{% get_media_prefix %}logos/Friends_logo.svg" alt="Imagen de {{ serie.titulo }}" height="50px" style="background-color: rgb(61, 61, 61); ">
+    </div>
+    <div>    
+        {% if user.is_superuser %}
+            <a href="{% url 'Series:serie_update' serie.pk %}" class="btn btn-success">Editar</a>
+            <a href="{% url 'Series:serie_delete' serie.pk %}" class="btn btn-success">Eliminar</a>
+        {% endif %}
+    </div>
+
     <div class="container">
         <div class="card shadow-sm mb-4">
             <div class="card-body">

@@ -46,6 +46,7 @@
 
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary w-45">Actualizar</button>
+                        <a href="{% url 'Series:serie_delete' serie.pk %}" class="btn btn-success">Eliminar</a>
                         <a href="{{ request.META.HTTP_REFERER|default:'' }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>

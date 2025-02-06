@@ -7,10 +7,6 @@ from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib import messages
 
 
-from django.shortcuts import render
-from .models import Serie
-
-
 def is_superuser(user):
     return user.is_superuser
 
@@ -43,6 +39,7 @@ class SerieListView(ListView):
         busqueda = self.request.GET.get("busqueda", None)
         if busqueda:
             queryset = queryset.filter(titulo__icontains=busqueda)
+        queryset = queryset.order_by('titulo')
         return queryset
     
     def get_context_data(self, **kwargs):

@@ -1,41 +1,117 @@
+<style>
+.serie_contenedor {
+    display: flex;
+    flex-direction: column;  
+    align-items: center;
+    width: 350px;
+    height: auto;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease; 
+}
+
+.serie_contenedor:hover {
+    transform: scale(1.1); 
+}
+
+.serie_image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;  
+    border-radius: 10px;
+}
+
+.titulo-serie {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.serie_contenedor:hover .titulo-serie {
+    bottom: 0;
+    opacity: 1;
+}
+
+/* Ocultar el botón "Desguardar" cuando el cursor esté sobre la imagen */
+.serie_contenedor:hover ~ .botonera {
+    display: none;
+}
+
+.botonera {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.boton {
+    display: inline-block;
+    padding: 5px 15px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+    background-color: #adb5bd; /* Color del botón */
+}
+
+.boton:hover {
+    opacity: 0.8;
+}
+
+
+
+</style>
 {% extends 'Main/base.html' %}
 
 {% block title %}
     Series Guardadas
 {% endblock title %}
 
-{% block content_title %}
+{% block title_content %}
     Series Guardadas
-{% endblock content_title %}
+{% endblock title_content %}
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="text-center mb-4">Mis Series Guardadas</h1>
     {% if series_guardadas %}
-        <div class="position-relative" >
-            <div id="guardadas" class="d-flex flex-wrap gap-3 pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;" >
+        <div class="position-relative">
+            <div id="guardadas" class="row" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
                 {% for guardada in series_guardadas %}
-                    <div class="col-md-4 mb-4" style="flex: 0 0 auto; width: 300px; margin-right: 10px; scroll-snap-align: start;">
-                        <div class="d-flex flex-column border p-3 rounded" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); height: 450px;">
-                            <div class="mb-1" style="flex-grow: 1;">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="serie_contenedor">
+                            <a href="{% url 'Series:serie_details' id=guardada.serie.id %}">
                                 {% if guardada.serie.imagen %}
-                                    <img src="{{ guardada.serie.imagen.url }}" alt="Imagen de {{ guardada.serie.titulo }}" class="img-fluid" style="border: 1px solid #ddd; border-radius: 5px; width: 100%; height: 250px; object-fit: cover;">
+                                    <img src="{{ guardada.serie.imagen.url }}" class="serie_image" alt="Imagen de {{ guardada.serie.titulo }}">
                                 {% else %}
-                                    <p>No hay imagen disponible.</p>
+                                    <div class="sin-imagen">Sin imagen disponible</div>
                                 {% endif %}
-                            </div>
-                            <div class="d-flex flex-column justify-content-between" style="height: 100%; padding-top: 10px;">
-                                <h2 class="h3 text-center mb-1">{{ guardada.serie.titulo }}</h2>
-            
-                                <a href="{% url 'Series:serie_details' id=guardada.serie.id %}" class="btn mx-auto mb-2" style="background-color: #495057; color: white;">Más Detalles</a>
-                                <form method="post" action="{% url 'Series:serie_save' id=guardada.serie.id %}" class="text-center">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm" style="background-color: #adb5bd ; color: white;">Desguardar</button>
-                                </form>
-                            </div>
+                            </a>
+
+                            <!-- Título de la serie -->
+                            <div class="titulo-serie">{{ guardada.serie.titulo }}</div>
                         </div>
+
+                        <!-- Botón de desguardar debajo de la imagen -->
+                        <form method="post" action="{% url 'Series:serie_save' id=guardada.serie.id %}" class="text-center botonera">
+                            {% csrf_token %}
+                            <button type="submit" class="boton">Desguardar</button>
+                        </form>
                     </div>
                 {% endfor %}
+
             </div>
         </div>
     {% else %}

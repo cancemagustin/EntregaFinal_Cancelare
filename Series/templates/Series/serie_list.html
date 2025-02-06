@@ -1,83 +1,151 @@
+<style>
+.serie_contenedor {
+    display: flex;
+    flex-direction: column;  /* Organiza la imagen arriba y los botones abajo */
+    align-items: center;
+    width: 350px;
+    height: auto;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease; /* Para agrandar el contenedor */
+}
+
+.serie_contenedor:hover {
+    transform: scale(1.1); /* Agranda el contenedor al pasar el cursor */
+}
+
+.serie_image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;  /* Cubre el área sin deformarse */
+    border-radius: 10px;
+    transition: opacity 0.3s ease; /* Para hacer desaparecer el botón al hacer hover */
+}
+
+.titulo-serie {
+    position: absolute;
+    bottom: -30px; /* Empuja el título fuera de la vista */
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    opacity: 0;
+    transition: all 0.3s ease; /* Transición para que el título aparezca */
+}
+
+.serie_contenedor:hover .titulo-serie {
+    bottom: 0;
+    opacity: 1;
+}
+
+.serie_contenedor:hover  + .botonera .guardar {
+    display: none; /* Oculta los botones al hacer hover sobre la imagen */
+}
+
+.botonera {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.boton {
+    display: inline-block;
+    padding: 5px 15px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.boton:hover {
+    opacity: 0.8;
+}
+
+.detalle {
+    background-color: rgb(0, 65, 65);
+}
+
+.actualizar {
+    background-color: rgb(97, 0, 0);
+}
+
+.eliminar {
+    background-color: rgb(20, 0, 0);
+}
+
+.guardar {
+    background-color: rgb(0, 24, 66);
+}
+
+.desguardar {
+    background-color: rgb(54, 54, 54);
+}
+
+
+</style>
+
 {% extends 'Main/base.html' %}
 
 {% block title %}
     Lista de Series
 {% endblock title %}
 
-{% block content_title %}
-    Lista de Series
-{% endblock content_title %}
+{% block title_content %}
+{% endblock title_content %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="text-center mb-4">Lista de Series</h1>
+    <div class="container my-5">
+        <div class="d-flex align-items-center mb-4" style="justify-content: center;">
+            <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex w-75">
+                <input type="text" name="busqueda" placeholder="Buscar serie" value="{{ request.GET.busqueda }}" 
+                    class="form-control me-2" style="border-radius: 20px; padding-left: 15px;">
+                <button type="submit" class="btn" style="border-radius: 20px; background-color: rgb(54, 54, 54); color: white;">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </form>    
+        </div>
 
-    <!-- Botón para agregar nueva serie -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex w-75">
-            <input type="text" name="busqueda" placeholder="Buscar por título o género" value="{{ request.GET.busqueda }}" 
-                   class="form-control me-2" style="border-radius: 20px; padding-left: 15px;">
-            <button type="submit" class="btn btn-primary" style="border-radius: 20px;">
-                <i class="bi bi-search"></i> Buscar
-            </button>
-        </form>
-        <a href="{% url 'Series:serie_create' %}" class="btn btn-success" style="border-radius: 20px;">
-            <i class="bi bi-plus-circle"></i> Agregar Nueva Serie
-        </a>
-    </div>
-
-    <!-- Lista de series -->
-    <div class="row">
-        {% for serie in serie %}
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm" style="border-radius: 15px;">
-                {% if serie.imagen %}
-                    <img src="{{ serie.imagen.url }}" class="card-img-top" alt="Imagen de {{ serie.titulo }}" 
-                         style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                {% else %}
-                    <div class="d-flex align-items-center justify-content-center bg-light" 
-                         style="height: 200px; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <p class="text-muted">Sin imagen</p>
-                    </div>
-                {% endif %}
-                <div class="card-body text-center">
-                    <h5 class="card-title text-dark">{{ serie.titulo }}</h5>
-                    <p class="card-text text-secondary">{{ serie.genero }}</p>
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'Series:serie_details' id=serie.id %}" class="btn btn-sm" style="background-color: #6c757d ; color: white; border-radius: 20px;">
-                            Detalles
+        <div class="row">
+            {% for serie in serie %}
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="serie_contenedor">
+                        <a href="{% url 'Series:serie_details' id=serie.id %}">
+                            {% if serie.imagen %}
+                                <img src="{{ serie.imagen.url }}" class="serie_image" alt="Imagen de {{ serie.titulo }}">
+                            {% else %}
+                                <div class="sin-imagen">Sin imagen disponible</div>
+                            {% endif %}
                         </a>
+                        <div class="titulo-serie">{{ serie.titulo }}</div>
+                    </div>
+        
+                    <!-- Mueve la botonera afuera del serie_contenedor -->
+                    <div class="botonera">
                         {% if user.is_superuser %}
-                            <a href="{% url 'Series:serie_update' id=serie.id %}" class="btn btn-warning btn-sm" style="border-radius: 20px;">
-                                Actualizar
-                            </a>
-                            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="btn btn-danger btn-sm" style="border-radius: 20px;">
-                                Eliminar
-                            </a>
+                            <a href="{% url 'Series:serie_update' id=serie.id %}" class="boton actualizar">Actualizar</a>
+                            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="boton eliminar">Eliminar</a>
                         {% else %}
                             <form method="post" action="{% url 'Series:serie_save' id=serie.id %}" class="d-inline">
                                 {% csrf_token %}
                                 {% if serie.id in series_guardadas_ids %}
-                                    <button type="submit" class="btn btn-sm" style="border-radius: 20px;background-color: #adb5bd ; color: white;">
-                                        Desguardar
-                                    </button>
+                                    <button type="submit" class="boton desguardar">Desguardar</button>
                                 {% else %}
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 20px;">
-                                        Guardar
-                                    </button>
+                                    <button type="submit" class="boton guardar">Guardar</button>
                                 {% endif %}
                             </form>
                         {% endif %}
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="col-12">
-            <p class="text-center text-muted">No hay series disponibles.</p>
-        </div>
-        {% endfor %}
     </div>
-</div>
 {% endblock content %}
-

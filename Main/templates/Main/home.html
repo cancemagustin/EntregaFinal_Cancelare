@@ -39,6 +39,9 @@
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s;
 }
 .serie_contenedor {
     flex: 0 0 auto; 
@@ -57,7 +60,8 @@
 
 }
 .contenedor_generos{
-    margin-left: 40px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 .generos_home {
     display: flex; 
@@ -100,11 +104,15 @@
     padding: 10px;
     background-color: rgb(44, 44, 44);
 }
+.position-relative:hover .scroll-button {
+    opacity: 1;
+    visibility: visible;
+}
 </style>
 <script>
     function scrollContent(direction, button) {
         const container = button.parentElement.querySelector('.generos_home');
-        const scrollAmount = 300; // Cambia este valor según tus necesidades
+        const scrollAmount = 800;
         
         if (container) {
             if (direction === 'left') {
@@ -126,7 +134,6 @@
                 {% if "Comedia" in serie.genero|stringformat:"s" %}
                 <a href="{% url 'Series:serie_details' id=serie.id %}">
                     <div class="recomendacion_contenedor">
-                        
                         {% if serie.imagen %}
                             <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="recomendacion_image">
                         {% else %}
@@ -149,9 +156,8 @@
 <div class="contenedor_generos">
     <h1 class="genero_tittle">Comedia</h1>
     <div class="position-relative">
-        {% if series|length > 4 %}
             <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-        {% endif %}
+
         <div class="generos_home">
             {% for serie in series %}
                 {% if "Comedia" in serie.genero|stringformat:"s" %}
