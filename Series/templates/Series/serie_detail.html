@@ -1,60 +1,107 @@
-
 {% extends 'Main/base.html' %}
 {% load static %}
 {% get_media_prefix as media_url %}
+
 {% block title %}
-    Detalles
+    {{ serie.titulo }} - Detalles
 {% endblock title %}
 
-<style>
-body {
-    position: relative;
-    min-height: 100vh;
-}
-
-.logo_series {
-    display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Ajusta la posición */
-}
-
-</style>
-
 {% block content %}
-    <div class="logo_series">
-        <img src="{% get_media_prefix %}logos/Friends_logo.svg" alt="Imagen de {{ serie.titulo }}" height="50px" style="background-color: rgb(61, 61, 61); ">
+<div class="container mt-5">
+
+    <!-- LOGO -->
+    <div class="text-center mb-5">
+        <img src="{% get_media_prefix %}logos/Friends_logo.svg" 
+             alt="Imagen de {{ serie.titulo }}" 
+             height="60px" 
+             class="bg-dark p-2 rounded shadow-lg">
     </div>
-    <div>    
-        {% if user.is_superuser %}
-            <a href="{% url 'Series:serie_update' serie.pk %}" class="btn btn-success">Editar</a>
-            <a href="{% url 'Series:serie_delete' serie.pk %}" class="btn btn-success">Eliminar</a>
+
+    <!-- BOTONES DE ADMINISTRACIÓN -->
+    {% if user.is_superuser %}
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{% url 'Series:serie_update' serie.pk %}" class="btn btn-warning me-2">✏️ Editar</a>
+            <a href="{% url 'Series:serie_delete' serie.pk %}" class="btn btn-danger">🗑️ Eliminar</a>
+        </div>
+    {% endif %}
+
+    <!-- DETALLES DE LA SERIE -->
+    <div class="card shadow-lg border-0 mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-center text-primary">{{ serie.titulo }}</h2>
+            <hr>
+            <p><strong>Descripción:</strong> {{ serie.descripcion }}</p>
+            <p><strong>Género:</strong> {{ serie.genero }}</p>
+            <p><strong>Temporadas:</strong> {{ serie.temporada }}</p>
+            <p><strong>Reparto:</strong> {{ serie.reparto }}</p>
+
+            {% if serie.imagen %}
+                <div class="text-center mt-4">
+                    <img src="{{ serie.imagen.url }}" 
+                         alt="Imagen de {{ serie.titulo }}" 
+                         class="img-fluid rounded shadow-lg"
+                         style="max-height: 400px; object-fit: cover;">
+                </div>
+            {% else %}
+                <p class="text-muted text-center mt-2">No hay imagen disponible.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE OPINIONES -->
+    <div class="mt-5">
+        <h2 class="text-light text-center mb-4">Opiniones de la serie</h2>
+
+        {% if opiniones %}
+            <div class="row">
+                {% for opinion in opiniones %}
+                    <div class="col-md-6 mb-4">  <!-- Se agregó mb-4 para espacio entre tarjetas -->
+                        <div class="card mb-3 shadow d-flex flex-column" style="height: 100%;">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title">
+                                    <a href="{% url 'Login:perfil' opinion.usuario.username %}" style="text-decoration: none; color: #495057;">
+                                        <h5 class="card-title">{{ opinion.usuario.username }}</h5>
+                                    </a>
+                                </h5>
+                                <p class="card-text">{{ opinion.opinion }}</p>
+                                <p class="text-warning">⭐ {{ opinion.estrellas }} / 5</p>
+                                {% if user == opinion.usuario or user.is_superuser %}
+                                    <form action="{% url 'Series:borrar_opinion' opinion.pk %}" method="post" class="mt-2">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm w-100">🗑️ Borrar Opinión</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted text-center">No hay opiniones todavía.</p>
         {% endif %}
     </div>
 
-    <div class="container">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <p><strong>Descripción:</strong> {{ serie.descripcion }}</p>
-                <p><strong>Género:</strong> {{ serie.genero }}</p>
-                <p><strong>Temporadas:</strong> {{ serie.temporada }}</p>
-                <p><strong>Reparto:</strong> {{ serie.reparto }}</p>
-                
-                {% if serie.imagen %}
-                    <div class="mt-4">
-                        <strong>Imagen:</strong>
-                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="img-fluid rounded shadow">
-                    </div>
-                {% else %}
-                    <p class="mt-2">No hay imagen disponible.</p>
-                {% endif %}
-            </div>
+    <!-- FORMULARIO PARA OPINIONES -->
+    <div class="card shadow-lg mt-5 border-0">
+        <div class="card-body">
+            <h3 class="text-center text-primary">Deja tu opinión</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Tu Opinión:</label>
+                    {{ form_opinion.opinion }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Estrellas:</label>
+                    {{ form_opinion.estrellas }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">📩 Enviar Opinión</button>
+            </form>
         </div>
-
-        <a href="{{ request.META.HTTP_REFERER|default:'' }}" class="btn btn-secondary">Volver</a>
-
     </div>
+
+    <div style="display: flex; justify-content: flex-end;" class="mt-3">
+        <a href="{{ request.META.HTTP_REFERER|default:'' }}" class="btn btn-outline-primary">Volver</a>
+    </div>
+</div>
 {% endblock %}

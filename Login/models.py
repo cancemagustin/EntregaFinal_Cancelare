@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
@@ -8,9 +8,3 @@ class CustomUser(AbstractUser):
     cumpleanos = models.DateField(blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
-class Profile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE
-    )
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

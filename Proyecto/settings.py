@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Main',
     'Login',
-    'Mensajes',
     'Series',
+    'Friends',
 ]
 
 MIDDLEWARE = [

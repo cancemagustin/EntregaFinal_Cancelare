@@ -9,26 +9,77 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card mt-5">
-                <div class="card-header text-center">
-                    <h4>Iniciar sesión</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        {{ form.as_p }}
-                        
-                        <button type="submit" class="btn btn-primary w-100">Logear</button>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="{{ request.META.HTTP_REFERER | default:'/' }}" class="text-decoration-none">Volver</a><br>
-                    <a href="{% url 'Login:register' %}" class="text-decoration-none">¿Crear una nueva cuenta?</a>
-                </div>
+<style>
+    body {
+        background: linear-gradient(135deg, #000000, #4e4e4e);
+        color: white;
+    }
+
+    .card-custom {
+        background: rgba(0, 0, 0, 0.85);
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
+        color: white;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #00c6ff;
+        box-shadow: 0 0 8px #00c6ff;
+    }
+
+    .btn-custom {
+        background: linear-gradient(90deg, #00c6ff, #0072ff);
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-custom:hover {
+        transform: scale(1.05);
+        background: linear-gradient(90deg, #0072ff, #00c6ff);
+    }
+
+    .link-custom {
+        color: #00c6ff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .link-custom:hover {
+        color: #ffcc70;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 72vh;">
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom p-4">
+            <div class="card-header text-center">
+                <h4>🔑 Iniciar sesión</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+                    
+                    <button type="submit" class="btn btn-custom w-100">Ingresar</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ request.META.HTTP_REFERER | default:'/' }}" class="link-custom">🔙 Volver</a><br>
+                <a href="{% url 'Login:register' %}" class="link-custom">📌 ¿Crear una nueva cuenta?</a>
             </div>
         </div>
     </div>

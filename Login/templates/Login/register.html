@@ -9,31 +9,90 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card mt-5">
-                <div class="card-header text-center">
-                    <h4>Crear nuevo usuario</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
+<style>
+    body {
+        background: linear-gradient(135deg, #1f1c2c, #494949);
+        color: white;
+    }
 
-                        <div class="alert alert-danger" role="alert">
-                            {{ form.non_field_errors }}
-                        </div>
-                        
-                        {{ form.as_p }}
-                        
-                        <button type="submit" class="btn btn-primary w-100">Crear nuevo usuario</button>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="{% url 'Login:login' %}" class="text-decoration-none">¿Ya tienes una cuenta? Inicia sesión</a>
-                    <br>
-                    <a href="{{ request.META.HTTP_REFERER | default:'/' }}" class="text-decoration-none" style="color:rgb(6, 0, 87);">Volver</a><br>
-                </div>
+    .card-custom {
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: #ff8c00;
+        box-shadow: 0 0 8px #ff8c00;
+    }
+
+    .btn-custom {
+        background: linear-gradient(90deg, #ff8c00, #ff3d00);
+        border: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-custom:hover {
+        transform: scale(1.05);
+        background: linear-gradient(90deg, #ff3d00, #ff8c00);
+    }
+
+    .link-custom {
+        color: #ffcc70;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .link-custom:hover {
+        color: #ff8c00;
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        background: rgba(255, 0, 0, 0.2);
+        border-color: rgba(255, 0, 0, 0.5);
+        color: white;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 84vh;">
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom p-4">
+            <div class="card-header text-center">
+                <h4>🆕 Crear nuevo usuario</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+                    
+                    {{ form.as_p }}
+                    
+                    <button type="submit" class="btn btn-custom w-100">Crear cuenta</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'Login:login' %}" class="link-custom">¿Ya tienes una cuenta? Inicia sesión</a>
+                <br>
+                <a href="{{ request.META.HTTP_REFERER | default:'/' }}" class="link-custom">🔙 Volver</a>
             </div>
         </div>
     </div>

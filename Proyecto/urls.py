@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('Main.urls')),
     path('', include('Login.urls')),
     path('', include('Series.urls')),
+    path('', include('Friends.urls')),
 
 ]
 if settings.DEBUG:

@@ -1,9 +1,11 @@
 from django.db import models
 from multiselectfield import MultiSelectField  
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+
 
 class Serie(models.Model):
-    # Definir las opciones de genero
     GENERO_CHOICES = [
         ('comedia', 'Comedia'),
         ('drama', 'Drama'),
@@ -34,3 +36,17 @@ class SerieGuardada(models.Model):
     serie = models.ForeignKey(Serie, on_delete=models.CASCADE)
     class Meta:
         unique_together = ('usuario', 'serie')
+
+class Opinion_serie(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    serie = models.ForeignKey('Serie', on_delete=models.CASCADE)
+    opinion = models.CharField(max_length=1000)
+    estrellas = models.IntegerField()
+    
+
+    def save(self, *args, **kwargs):
+        print(f"Guardando opinión de {self.usuario} sobre {self.serie}")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.usuario} - {self.serie} - {self.estrellas} estrellas"

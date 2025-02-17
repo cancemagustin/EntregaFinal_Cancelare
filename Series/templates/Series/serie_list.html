@@ -90,7 +90,14 @@
     background-color: rgb(54, 54, 54);
 }
 
+.boton-fijo {
+    position: fixed;
+    bottom: 50px; 
+    right: 40px;   
+    z-index: 1000; 
+}
 
+    
 </style>
 
 {% extends 'Main/base.html' %}
@@ -148,4 +155,9 @@
             {% endfor %}
         </div>
     </div>
+    <div>
+        <a href="{% url 'Main:home' %}" class="btn btn-primary boton-fijo">Volver</a>
+    </div>
+    
+
 {% endblock content %}

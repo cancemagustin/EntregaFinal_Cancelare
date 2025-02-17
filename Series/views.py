@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse_lazy
-from .models import Serie, SerieGuardada
-from .forms import SerieForm
+from .models import Serie, SerieGuardada, Opinion_serie
+from .forms import SerieForm, OpinionSerieForm
 from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 def is_superuser(user):
@@ -54,14 +56,54 @@ class SerieListView(ListView):
         return context
     
 
-    
+from django.contrib.auth.decorators import login_required
+
 class SerieDetailView(DetailView):
     model = Serie
     template_name = 'Series/serie_detail.html'
     context_object_name = 'serie'
-    
+
     def get_object(self):
-        return get_object_or_404(Serie, id=self.kwargs['id'])
+        return Serie.objects.get(id=self.kwargs['id'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        serie = self.get_object()
+        context['form_opinion'] = OpinionSerieForm()
+        context['opiniones'] = Opinion_serie.objects.filter(serie=serie)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('Login:login') 
+
+        serie = self.get_object()
+        form_opinion = OpinionSerieForm(request.POST)
+        
+        if form_opinion.is_valid():
+            existing_opinion = Opinion_serie.objects.filter(usuario=request.user, serie=serie).first()
+
+            if existing_opinion:
+                # Si ya existe, actualizar la opinión
+                existing_opinion.opinion = form_opinion.cleaned_data['opinion']
+                existing_opinion.save()
+            else:
+                # Guardar la nueva opinión
+                opinion = form_opinion.save(commit=False)
+                opinion.usuario = request.user
+                opinion.serie = serie
+                opinion.save()
+
+            return redirect('Series:serie_details', id=serie.id)
+
+        return self.render_to_response({'form_opinion': form_opinion})
+
+@login_required
+def borrar_opinion(request, id):
+    opinion = get_object_or_404(Opinion_serie, id=id, usuario=request.user)
+    serie_id = opinion.serie.id
+    opinion.delete()
+    return redirect(request.META.get('HTTP_REFERER', request.path))
     
 @user_passes_test(is_superuser)    
 @login_required  
@@ -91,8 +133,10 @@ def serie_save(request, id):
         SerieGuardada.objects.create(usuario=request.user, serie=serie)
         messages.success(request, "La serie ha sido guardada.")
 
-    return redirect('Series:serie_list')
+    return redirect(request.META.get('HTTP_REFERER', request.path))
 
 def serie_saved_list(request):
     series_guardadas = SerieGuardada.objects.filter(usuario=request.user)
     return render(request, 'Series/serie_saved_list.html', {'series_guardadas': series_guardadas})
+
+

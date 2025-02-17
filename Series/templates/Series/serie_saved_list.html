@@ -12,7 +12,7 @@
 }
 
 .serie_contenedor:hover {
-    transform: scale(1.1); 
+    transform: scale(1.05); /* Reducir un poco el zoom para que no sea tan grande */
 }
 
 .serie_image {
@@ -20,11 +20,12 @@
     height: 300px;
     object-fit: cover;  
     border-radius: 10px;
+    z-index: 1; /* Para asegurarse de que la imagen esté detrás del título */
 }
 
 .titulo-serie {
     position: absolute;
-    bottom: -30px;
+    bottom: 0; /* Ajustado para que siempre se vea visible al hacer hover */
     left: 0;
     width: 100%;
     text-align: center;
@@ -33,16 +34,15 @@
     padding: 10px;
     opacity: 0;
     transition: all 0.3s ease;
+    z-index: 2; /* Asegura que el título esté encima de la imagen */
 }
 
 .serie_contenedor:hover .titulo-serie {
-    bottom: 0;
-    opacity: 1;
+    opacity: 1; /* Solo se hace visible cuando se hace hover */
 }
 
-/* Ocultar el botón "Desguardar" cuando el cursor esté sobre la imagen */
 .serie_contenedor:hover ~ .botonera {
-    display: none;
+    display: none; /* Ocultar la botonera cuando se hace hover */
 }
 
 .botonera {
@@ -50,6 +50,7 @@
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
+    z-index: 3; /* Asegura que la botonera esté encima de la imagen */
 }
 
 .boton {
@@ -64,7 +65,7 @@
     cursor: pointer;
     transition: 0.3s;
     margin-top: 10px;
-    background-color: #adb5bd; /* Color del botón */
+    background-color: #adb5bd;
 }
 
 .boton:hover {
@@ -72,16 +73,15 @@
 }
 
 
-
 </style>
 {% extends 'Main/base.html' %}
 
 {% block title %}
-    Series Guardadas
+    Mis Favoritos
 {% endblock title %}
 
 {% block title_content %}
-    Series Guardadas
+    Mis Favoritos
 {% endblock title_content %}
 
 {% block content %}
