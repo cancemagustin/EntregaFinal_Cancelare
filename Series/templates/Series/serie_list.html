@@ -122,6 +122,9 @@
         </div>
 
         <div class="row">
+            {% if user.is_superuser %}
+                <a href="{% url 'Series:serie_create' %}">Crear Serie</a>
+            {% endif %}
             {% for serie in serie %}
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                     <div class="serie_contenedor">

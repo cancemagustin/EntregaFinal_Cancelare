@@ -1,16 +1,117 @@
 {% extends 'Main/base.html' %}
+
 {% block title %}
-    Editar
-{% endblock title %}
-{% block content_title %}
     Editar Perfil
-{% endblock content_title %}
+{% endblock title %}
+
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar Cambios</button>
-    </form>
-    <a href="{% url 'Login:perfil' %}">Cancelar</a>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #121212;
+        color: white;
+    }
+    .edit-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    .edit-card {
+        background: linear-gradient(145deg, #2a2a2a, #1c1c1c);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
+        width: 60%;
+        max-width: 600px;
+        text-align: center;
+        transition: 0.3s ease-in-out;
+    }
+    .edit-card:hover {
+        transform: scale(1.02);
+    }
+    .edit-card h2 {
+        font-size: 1.8em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #ffcc00;
+    }
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: left;
+    }
+    .edit-form label {
+        font-weight: bold;
+        color: #ffcc00;
+    }
+    .edit-form input, .edit-form textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        background: #333;
+        color: white;
+        font-size: 1em;
+        outline: none;
+        transition: 0.3s ease-in-out;
+    }
+    .edit-form input:focus, .edit-form textarea:focus {
+        background: #444;
+        box-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+    }
+    .edit-btn {
+        background: linear-gradient(145deg, #ff4d4d, #c70000);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+    }
+    .edit-btn:hover {
+        background: linear-gradient(145deg, #c70000, #8b0000);
+        transform: scale(1.05);
+    }
+    .cancel-btn {
+        display: block;
+        margin-top: 15px;
+        color: #ffcc00;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+    }
+    .cancel-btn:hover {
+        color: #ffd700;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-card">
+        <h2>Editar Perfil</h2>
+        
+        <form method="post" enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div>
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p style="color: red; font-size: 0.9em;">{{ field.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="edit-btn">Guardar Cambios</button>
+        </form>
+
+        <a href="{% url 'Login:perfil' %}" class="cancel-btn">Cancelar</a>
+    </div>
+</div>
 {% endblock content %}
 

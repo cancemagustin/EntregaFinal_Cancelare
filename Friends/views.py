@@ -2,17 +2,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import seguidos
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 User = get_user_model()
 @login_required
 def seguir_usuario(request, usuario_id):
     User = get_user_model()
     usuario_a_seguir = get_object_or_404(User, id=usuario_id)
-
-    if request.user != usuario_a_seguir:  # Evita que un usuario se siga a sí mismo
+    if request.user != usuario_a_seguir:  
         seguidos.objects.get_or_create(seguidor=request.user, sigue=usuario_a_seguir)
-
-    return redirect('Login:perfil', username=usuario_a_seguir.username)  # ✅ Redirige a 'perfil'
+    return redirect(request.META.get('HTTP_REFERER', request.path))
 
 
 @login_required
@@ -24,7 +23,7 @@ def dejar_de_seguir_usuario(request, usuario_id):
     if seguimiento.exists():
         seguimiento.delete()
 
-    return redirect('Login:perfil', username=usuario_a_dejar.username)  # ✅ Corrige la redirección
+    return redirect(request.META.get('HTTP_REFERER', request.path))
 
 
 @login_required
@@ -33,7 +32,6 @@ def lista_seguidores(request):
     seguidores = seguidos.objects.filter(sigue=usuario).select_related('seguidor')  # Quiénes te siguen
     seguidos_list = seguidos.objects.filter(seguidor=usuario).select_related('sigue')  # A quiénes sigues
 
-    # Obtener todos los usuarios del sistema, excluyendo al usuario actual
     todos_usuarios = User.objects.exclude(id=usuario.id)
 
     # Filtrar los que NO están en seguidores ni seguidos

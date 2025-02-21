@@ -190,6 +190,7 @@
                 </tr>
             </tbody>
         </table>
+        <a href="{% url 'Login:edit_profile'  %}">Editar perfil</a>
     </div>
 
     <div class="opiniones-container">
@@ -197,10 +198,11 @@
         {% if opiniones %}
             {% for opinion in opiniones %}
                 <div class="opinion-card">
-                    <span class="opinion-title">{{ opinion.serie.titulo }}</span>
+                    <a href="{% url 'Series:serie_details' opinion.serie.pk %}"style="text-decoration: none;"><span class="opinion-title" >{{ opinion.serie.titulo }}</span></a> 
                     <span class="opinion-stars">⭐{{ opinion.estrellas }}/5</span>
                     <p class="opinion-text">"{{ opinion.opinion }}"</p>
                 </div>
+
                 {% if user == opinion.usuario or user.is_superuser %}
                     <form action="{% url 'Series:borrar_opinion' opinion.pk%}" method="post" class="mt-2">
                         {% csrf_token %}

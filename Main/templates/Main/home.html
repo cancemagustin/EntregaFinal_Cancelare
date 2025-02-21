@@ -165,8 +165,15 @@
             }
         }
     }
-</script>
+    const generosHome = document.querySelectorAll('.generos_home');
 
+    generosHome.forEach((generos) => {
+        generos.addEventListener('wheel', (e) => {
+            e.preventDefault(); // Evita el desplazamiento vertical
+            generos.scrollLeft += e.deltaY; // Desplaza horizontalmente basado en el movimiento de la rueda
+        });
+    });
+</script>
 <div class="recomendaciones">
     <div class="position-relative">
         {% if ultimas_5_series|length > 4 %}
@@ -174,7 +181,7 @@
         {% endif %}
         <div class="generos_home">
             {% for serie in ultimas_5_series %}
-                {% if "Comedia" in serie.genero|stringformat:"s" %}
+
                 <a href="{% url 'Series:serie_details' id=serie.id %}">
                     <div class="recomendacion_contenedor">
                         {% if serie.imagen %}
@@ -184,7 +191,7 @@
                         {% endif %}
                     </div>
                 </a>
-                {% endif %}
+
             {% endfor %}
         </div>
 
@@ -194,325 +201,41 @@
     </div>
 </div>
 
-
-<div class="contenedor_generos">
-    <h1 class="genero_tittle">Comedia</h1>
-    <div class="position-relative" style="height: 300px;">
-        <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-        <div class="generos_home">
-            {% for serie in series %}
-                {% if "Comedia" in serie.genero|stringformat:"s" %}
-                <a href="{% url 'Series:serie_details' id=serie.id %}">
-                    <div class="serie_contenedor">
-                        {% if serie.imagen %}
-                            <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="series_imagenes">
-                        {% else %}
-                            <div class="sin-imagen">Sin imagen disponible</div>
-                        {% endif %}
-                        
-                        <!-- Título de la serie que aparece en hover -->
-                        <div class="titulo-serie">{{ serie.titulo }}</div>
-                    </div>
-                </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-    </div>
-</div>
-
-
-        <div class="contenedor_generos">
-            <h1 class="genero_tittle">Drama</h1>
-            <div class="position-relative">
-                {% if series|length > 4 %}
-                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-                {% endif %}
-
-                <div class="generos_home">
-                    {% for serie in series %}
-                        {% if "Drama" in serie.genero|stringformat:"s" %}
-                            <a href="{% url 'Series:serie_details' id=serie.id %}">
-                                <div class="serie_contenedor">
-                                    
-                                    {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                    {% else %}
-                                        <p style="color: white;">No hay imagen disponible.</p>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if series|length > 4 %}
-                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="contenedor_generos">
-            <h1 class="genero_tittle">Acción</h1>
-            <div class="position-relative">
-                {% if series|length > 4 %}
-                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-                {% endif %}
-
-                <div class="generos_home">
-                    {% for serie in series %}
-                        {% if "Acción" in serie.genero|stringformat:"s" %}
-                            <a href="{% url 'Series:serie_details' id=serie.id %}">
-                                <div class="serie_contenedor">
-                                    
-                                    {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                    {% else %}
-                                        <p style="color: white;">No hay imagen disponible.</p>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if series|length > 4 %}
-                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-                {% endif %}
-            </div>
-        </div>
-        <div class="contenedor_generos">
-            <h1 class="genero_tittle">Terror</h1>
-            <div class="position-relative">
-                {% if series|length > 4 %}
-                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-                {% endif %}
-
-                <div class="generos_home">
-                    {% for serie in series %}
-                        {% if "Terror" in serie.genero|stringformat:"s" %}
-                            <a href="{% url 'Series:serie_details' id=serie.id %}">
-                                <div class="serie_contenedor">
-                                    
-                                    {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                    {% else %}
-                                        <p style="color: white;">No hay imagen disponible.</p>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if series|length > 4 %}
-                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-                {% endif %}
-            </div>
-        </div>
-        <div class="contenedor_generos">
-            <h1 class="genero_tittle">Ciencia Ficción</h1>
-            <div class="position-relative">
-                {% if series|length > 4 %}
-                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-                {% endif %}
-
-                <div class="generos_home">
-                    {% for serie in series %}
-                        {% if "Ciencia Ficción" in serie.genero|stringformat:"s" %}
-                            <a href="{% url 'Series:serie_details' id=serie.id %}">
-                                <div class="serie_contenedor">
-                                    
-                                    {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                    {% else %}
-                                        <p style="color: white;">No hay imagen disponible.</p>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if series|length > 4 %}
-                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-                {% endif %}
-            </div>
-        </div>
-        <div class="contenedor_generos">
-            <h1 class="genero_tittle">Romance</h1>
-            <div class="position-relative">
-                {% if series|length > 4 %}
-                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-                {% endif %}
-
-                <div class="generos_home">
-                    {% for serie in series %}
-                        {% if "Romance" in serie.genero|stringformat:"s" %}
-                            <a href="{% url 'Series:serie_details' id=serie.id %}">
-                                <div class="serie_contenedor">
-                                    
-                                    {% if serie.imagen %}
-                                        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                    {% else %}
-                                        <p style="color: white;">No hay imagen disponible.</p>
-                                    {% endif %}
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if series|length > 4 %}
-                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-                {% endif %}
-            </div>
-        </div>
+{% for genero in generos %}
     <div class="contenedor_generos">
-        <h1 class="genero_tittle">Documental</h1>
-        <div class="position-relative">
-            {% if series|length > 4 %}
+        <h1 class="genero_tittle">{{ genero.genero }}</h1>
+        <div class="position-relative" style="height: 300px;">
+            {% if genero.seriegenero_set.all|length > 4 %}
                 <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
             {% endif %}
 
             <div class="generos_home">
-                {% for serie in series %}
-                    {% if "Documental" in serie.genero|stringformat:"s" %}
-                        <a href="{% url 'Series:serie_details' id=serie.id %}">
-                            <div class="serie_contenedor">
-                                
-                                {% if serie.imagen %}
-                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                {% else %}
-                                    <p style="color: white;">No hay imagen disponible.</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endif %}
+                {% for seriegenero in genero.seriegenero_set.all %}
+                    <a href="{% url 'Series:serie_details' id=seriegenero.serie.id %}">
+                        <div class="serie_contenedor">
+                            {% if seriegenero.serie.imagen %}
+                                <img src="{{ seriegenero.serie.imagen.url }}" alt="Imagen de {{ seriegenero.serie.titulo }}" class="series_imagenes">
+                            {% else %}
+                                <div class="sin-imagen">Sin imagen disponible</div>
+                            {% endif %}
+                            
+                            <!-- Título de la serie que aparece en hover -->
+                            <div class="titulo-serie">{{ seriegenero.serie.titulo }}</div>
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
 
-            {% if series|length > 4 %}
+            {% if genero.seriegenero_set.all|length > 4 %}
                 <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
             {% endif %}
         </div>
     </div>
-    <div class="contenedor_generos">
-        <h1 class="genero_tittle">Fantasía</h1>
-        <div class="position-relative">
-            {% if series|length > 4 %}
-                <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-            {% endif %}
+{% endfor %}
 
-            <div class="generos_home">
-                {% for serie in series %}
-                    {% if "Fantasía" in serie.genero|stringformat:"s" %}
-                        <a href="{% url 'Series:serie_details' id=serie.id %}">
-                            <div class="serie_contenedor">
-                                
-                                {% if serie.imagen %}
-                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                {% else %}
-                                    <p style="color: white;">No hay imagen disponible.</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
 
-            {% if series|length > 4 %}
-                <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-            {% endif %}
-        </div>
-    </div>
-    <div class="contenedor_generos">
-        <h1 class="genero_tittle">Misterio</h1>
-        <div class="position-relative">
-            {% if series|length > 4 %}
-                <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-            {% endif %}
 
-            <div class="generos_home">
-                {% for serie in series %}
-                    {% if "Misterio" in serie.genero|stringformat:"s" %}
-                        <a href="{% url 'Series:serie_details' id=serie.id %}">
-                            <div class="serie_contenedor">
-                                
-                                {% if serie.imagen %}
-                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                {% else %}
-                                    <p style="color: white;">No hay imagen disponible.</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
 
-            {% if series|length > 4 %}
-                <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-            {% endif %}
-        </div>
-    </div>
-    <div class="contenedor_generos">
-        <h1 class="genero_tittle">Aventura</h1>
-        <div class="position-relative">
-            {% if series|length > 4 %}
-                <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-            {% endif %}
-
-            <div class="generos_home">
-                {% for serie in series %}
-                    {% if "Aventura" in serie.genero|stringformat:"s" %}
-                        <a href="{% url 'Series:serie_details' id=serie.id %}">
-                            <div class="serie_contenedor">
-                                
-                                {% if serie.imagen %}
-                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                {% else %}
-                                    <p style="color: white;">No hay imagen disponible.</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            {% if series|length > 4 %}
-                <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-            {% endif %}
-        </div>
-    </div>
-    <div class="contenedor_generos">
-        <h1 class="genero_tittle">Política</h1>
-        <div class="position-relative">
-            {% if series|length > 4 %}
-                <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-            {% endif %}
-
-            <div class="generos_home">
-                {% for serie in series %}
-                    {% if "Política" in serie.genero|stringformat:"s" %}
-                        <a href="{% url 'Series:serie_details' id=serie.id %}">
-                            <div class="serie_contenedor">
-                                
-                                {% if serie.imagen %}
-                                    <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}" class="serie_image">
-                                {% else %}
-                                    <p style="color: white;">No hay imagen disponible.</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            {% if series|length > 4 %}
-                <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-            {% endif %}
-        </div>
-    </div>
 
 
 {% endblock content %}

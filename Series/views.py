@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse_lazy
-from .models import Serie, SerieGuardada, Opinion_serie
-from .forms import SerieForm, OpinionSerieForm
+from .models import Serie, SerieGuardada, Opinion_serie, Generos
+from .forms import SerieForm, OpinionSerieForm, GeneroForm
 from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,13 +14,20 @@ def is_superuser(user):
 
 def serie_update(request, id):
     serie = Serie.objects.get(id=id)
+
     if request.method == "POST":
         form = SerieForm(request.POST, request.FILES, instance=serie)
+
         if form.is_valid():
-            form.save()
+            serie = form.save(commit=False)  # Guardamos la serie pero sin afectar aún la relación ManyToMany
+            serie.save()
+            form.save_m2m()  # Guardamos la relación ManyToMany correctamente
+
             return redirect("Series:serie_list")
+
     else:
         form = SerieForm(instance=serie)
+
     return render(request, 'Series/serie_update.html', context={"form": form, "serie": serie})
 
 def serie_delete(request,id):
@@ -47,7 +54,6 @@ class SerieListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            # Obtener IDs de series guardadas por el usuario
             context['series_guardadas_ids'] = list(
                 SerieGuardada.objects.filter(usuario=self.request.user).values_list('serie_id', flat=True)
             )
@@ -56,7 +62,6 @@ class SerieListView(ListView):
         return context
     
 
-from django.contrib.auth.decorators import login_required
 
 class SerieDetailView(DetailView):
     model = Serie
@@ -109,7 +114,7 @@ def borrar_opinion(request, id):
 @login_required  
 def serie_create(request):
     if request.method == "POST":
-        form = SerieForm(request.POST, request.FILES)  
+        form = SerieForm(request.POST, request.FILES) 
         if form.is_valid():
             serie = form.save(commit=False)
             serie.save()  

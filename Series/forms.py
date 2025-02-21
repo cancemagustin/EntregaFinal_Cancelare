@@ -1,5 +1,5 @@
 from django import forms
-from .models import Serie, Opinion_serie
+from .models import Serie, Opinion_serie, Generos
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 ESTRELLAS_CHOICES = [
@@ -10,9 +10,24 @@ ESTRELLAS_CHOICES = [
         (5, "⭐ 5"),
     ]
 class SerieForm(forms.ModelForm):
+    generos = forms.ModelMultipleChoiceField(
+        queryset=Generos.objects.all(),  # Carga todos los géneros disponibles
+        widget=forms.CheckboxSelectMultiple(),  # Usa checkboxes para seleccionar múltiples
+        required=False  # No es obligatorio elegir un género
+    )
+
     class Meta:
         model = Serie
-        fields = ["titulo", "descripcion", "genero", "temporada", "reparto", "imagen"]
+        fields = ["titulo", "descripcion", "generos", "temporada", "reparto", "imagen", "plataformas"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:  # Si la serie ya existe, preseleccionamos sus géneros
+            self.fields["generos"].initial = self.instance.generos.all()
+class GeneroForm(forms.ModelForm):
+    class Meta:
+        model = Generos
+        fields = ['genero']
 class OpinionSerieForm(forms.ModelForm):
   
 
