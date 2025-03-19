@@ -6,7 +6,29 @@
 {% block content %}
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.genero_titulo_contenedor {
+    display: flex;
+    align-items: center; /* Alinea verticalmente */
+    gap: 15px; /* Espacio entre el título y "Explorar todas" */
+}
+
+.explorar_mas {
+    text-decoration: none; /* Quita el subrayado */
+    color: rgb(104, 104, 104);
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+.explorar_mas:hover {
+    color: rgb(255, 255, 255);
+    transition: 0.5s;
+}
 .serie_contenedor {
     display: flex;
     flex-direction: column;
@@ -15,37 +37,37 @@
     height: 250px;
     margin: auto;
     position: relative;
-    overflow: visible;  /* Permitirá que el contenedor se agrande fuera del límite */
+    overflow: visible;  
     transition: transform 0.3s ease;
-    z-index: 1; /* Se asegura que no se solape con los demás contenedores */
+    z-index: 1; 
     justify-content: center;
 }
 
 .serie_contenedor:hover {
-    transform: scale(1.2); /* Aumenta el tamaño al pasar el cursor */
-    z-index: 10; /* Asegura que el contenedor agrandado se quede por encima de los demás */
+    transform: scale(1.10); 
+    z-index: 10;
 }
 
 .generos_home {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
     gap: 15px;
     padding-bottom: 15px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
-    position: relative; /* Mantiene las tarjetas contenidas sin afectar el desplazamiento */
-    padding-left: 10px; 
-    padding-right: 10px;
+    position: relative;
+    padding-top: 15px;
 }
 
 .series_imagenes {
     width: 100%;
-    height: 100%;  /* Mantiene la imagen dentro del contenedor */
-    object-fit: cover;  /* Cubre el área sin deformarse */
+    height: 100%; 
+    object-fit: cover; 
     border-radius: 10px;
-    transition: opacity 0.3s ease; /* Para hacer desaparecer el botón al hacer hover */
+    transition: opacity 0.3s ease; 
 }
 
 .titulo-serie {
@@ -60,11 +82,42 @@
     opacity: 0;
     transition: all 0.3s ease; /* Transición para que el título aparezca */
 }
+.contenedor_generos{
+    margin-left: 50px;
+    margin-right: 50px;    
+}
+.contenedor_generos .generos_home {
+    overflow-y: hidden; /* Elimina el scroll vertical */
+    max-height: 250px; /* Limita la altura máxima */
+}
+
+.contenedor_generos .serie_contenedor {
+    width: 350px;
+    height: auto; /* Altura dinámica */
+    overflow: hidden;
+}
+
+.contenedor_generos .series_imagenes {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    aspect-ratio: 16/9; /* Mantiene una proporción adecuada */
+    object-fit: cover;  /* Cubre el área sin deformarse */
+    border-radius: 10px;
+}
+
 
 .serie_contenedor:hover .titulo-serie {
     bottom: 0;
     opacity: 1; /* Hace visible el título al hacer hover */
+}.genero_titulo_contenedor {
+    display: flex;
+    align-items: center; /* Alinea verticalmente */
+    justify-content: space-between; /* Separa los elementos */
+    gap: 15px; /* Espacio entre el título y "Explorar más" */
 }
+
+
 
 .scroll-button {
     position: absolute;
@@ -120,10 +173,7 @@
     height: 100%;
 
 }
-.contenedor_generos{
-    margin-left: 50px;
-    margin-right: 50px;
-}
+
 .generos_home::-webkit-scrollbar {
     display: none;
 }
@@ -169,18 +219,19 @@
 
     generosHome.forEach((generos) => {
         generos.addEventListener('wheel', (e) => {
-            e.preventDefault(); // Evita el desplazamiento vertical
-            generos.scrollLeft += e.deltaY; // Desplaza horizontalmente basado en el movimiento de la rueda
+            e.preventDefault();
+            generos.scrollLeft += e.deltaY; 
         });
     });
 </script>
 <div class="recomendaciones">
+    <h1 style="padding-bottom: 20px; color: white; text-align: center;">SERIES CON MEJORES PUNTUACIONES</h1>
     <div class="position-relative">
-        {% if ultimas_5_series|length > 4 %}
+        {% if top_5_series|length > 4 %}
             <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
         {% endif %}
         <div class="generos_home">
-            {% for serie in ultimas_5_series %}
+            {% for serie in top_5_series %}
 
                 <a href="{% url 'Series:serie_details' id=serie.id %}">
                     <div class="recomendacion_contenedor">
@@ -195,41 +246,51 @@
             {% endfor %}
         </div>
 
-        {% if ultimas_5_series|length > 4 %}
+        {% if top_5_series|length > 4 %}
             <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
         {% endif %}
     </div>
 </div>
 
 {% for genero in generos %}
-    <div class="contenedor_generos">
-        <h1 class="genero_tittle">{{ genero.genero }}</h1>
-        <div class="position-relative" style="height: 300px;">
-            {% if genero.seriegenero_set.all|length > 4 %}
-                <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
-            {% endif %}
 
-            <div class="generos_home">
-                {% for seriegenero in genero.seriegenero_set.all %}
+    <div class="contenedor_generos">
+        {% if genero.seriegenero_set.exists%}
+            <div class="genero_titulo_contenedor">
+                <h1 class="genero_tittle">{{ genero.genero }}</h1>
+                <a href="{% url 'Series:genero_list' genero%}" class="explorar_mas">Explorar todas ></a>
+
+            </div>
+        
+            <div class="position-relative" >
+                {% if genero.seriegenero_set.all|length > 4 %}
+                    <button class="scroll-button left" onclick="scrollContent('left', this)">&lt;</button>
+                {% endif %}
+    
+                <div class="generos_home">
+                    {% for seriegenero in genero.series_aleatorias %}
                     <a href="{% url 'Series:serie_details' id=seriegenero.serie.id %}">
-                        <div class="serie_contenedor">
+                        <div class="serie_contenedor" >
                             {% if seriegenero.serie.imagen %}
                                 <img src="{{ seriegenero.serie.imagen.url }}" alt="Imagen de {{ seriegenero.serie.titulo }}" class="series_imagenes">
                             {% else %}
                                 <div class="sin-imagen">Sin imagen disponible</div>
                             {% endif %}
-                            
-                            <!-- Título de la serie que aparece en hover -->
+                
                             <div class="titulo-serie">{{ seriegenero.serie.titulo }}</div>
                         </div>
                     </a>
                 {% endfor %}
+                
+                </div>
+    
+                {% if genero.seriegenero_set.all|length > 4 %}
+                    <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
+                {% endif %}
             </div>
-
-            {% if genero.seriegenero_set.all|length > 4 %}
-                <button class="scroll-button right" onclick="scrollContent('right', this)">&gt;</button>
-            {% endif %}
-        </div>
+        {% endif %}
+        
+        
     </div>
 {% endfor %}
 

@@ -1,169 +1,174 @@
-<style>
-    .botonera {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-}
+{% extends 'Main/base.html' %}
+{% load static %}
+{% get_media_prefix as media_url %}
 
+{% block title %}{{ serie.titulo }} - Detalles{% endblock title %}
+
+{% block content %}
+<style>
+.serie-container {
+    position: relative;
+    color: white;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
+    padding: 60px;
+    border-radius: 15px;
+}
+.serie-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('{{ serie.imagen.url }}') no-repeat center center/cover;
+    filter: blur(15px);
+    opacity: 0.4;
+    z-index: -1;
+    border-radius: 15px;
+}
+.serie-detalle {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.serie-detalle img {
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
 .boton {
-    display: inline-block;
-    padding: 5px 15px;
-    font-size: 14px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 20px;
+    padding: 12px 25px;
+    border-radius: 25px;
     border: none;
     color: white;
+    font-size: 18px;
     cursor: pointer;
     transition: 0.3s;
-    margin-top: 10px;
+}
+.boton.guardar { background-color: #0078ff; }
+.boton.desguardar { background-color: #555; }
+.boton:hover { opacity: 0.8; }
+.botonera {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+.opiniones-container {
+    margin-top: 40px;
+    color: rgb(255, 255, 255);
+}
+.card-opinion {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-.boton:hover {
-    opacity: 0.8;
+.form-label {
+    color: white;
 }
-
-.detalle {
-    background-color: rgb(0, 65, 65);
+.form-control {
+    background-color: #f1f1f1;
+    width: 60%;
+    margin: 0 auto;
 }
-
-.actualizar {
-    background-color: rgb(97, 0, 0);
+.stars-container {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    margin: 0 auto;
 }
-
-.eliminar {
-    background-color: rgb(20, 0, 0);
+.btn-primary {
+    background-color: #003366; /* Azul oscurito */
+    width: auto;
+    margin: 0 auto;
+    display: block;
+    padding: 10px 30px;
+    border-radius: 25px;
 }
+.boton.actualizar{background-color: rgb(27, 4, 160); text-decoration: none;}
+.boton.eliminar{background-color: rgb(110, 0, 0); text-decoration: none;}
 .boton-fijo {
     position: fixed;
     bottom: 50px; 
     right: 40px;   
     z-index: 1000; 
-}
+}               
+.user-opinion{text-decoration: none; color: white;}
+
 </style>
 
-{% extends 'Main/base.html' %}
-{% load static %}
-{% get_media_prefix as media_url %}
-
-{% block title %}
-    {{ serie.titulo }} - Detalles
-{% endblock title %}
-
-{% block content %}
-<div class="container mt-5">
-
-    <!-- LOGO -->
-    <div class="text-center mb-5">
-        <img src="{% get_media_prefix %}logos/Friends_logo.svg" 
-             alt="Imagen de {{ serie.titulo }}" 
-             height="60px" 
-             class="bg-dark p-2 rounded shadow-lg">
-             
-    </div>
-
-    <!-- BOTONES DE ADMINISTRACIÓN -->
-    <div class="botonera">
-        {% if user.is_superuser %}
-            <a href="{% url 'Series:serie_update' id=serie.id %}" class="boton actualizar">Actualizar</a>
-            <a href="{% url 'Series:serie_delete' id=serie.id %}" class="boton eliminar">Eliminar</a>
-        {% else %}
-            <form method="post" action="{% url 'Series:serie_save' id=serie.id %}" class="d-inline">
-                {% csrf_token %}
-                {% if serie.id in series_guardadas_ids %}
-                    <button type="submit" class="boton desguardar">Desguardar</button>
-                {% else %}
-                    <button type="submit" class="boton guardar">Guardar</button>
-                {% endif %}
-            </form>
-        {% endif %}
-    </div>
-
-    <!-- DETALLES DE LA SERIE -->
-    <div class="card shadow-lg border-0 mb-4">
-        <div class="card-body">
-            <h2 class="card-title text-center text-primary">{{ serie.titulo }}</h2>
-            <hr>
-            <p><strong>Descripción:</strong> {{ serie.descripcion }}</p>
-            <p>📌 Géneros: 
-                {% for genero in serie.generos.all %}
-                    {{ genero.genero }}{% if not forloop.last %}, {% endif %}
-                {% empty %}
-                    No hay géneros asociados
-                {% endfor %}
-            </p>
-            
+<div class="serie-container">
+    <div class="serie-bg"></div>
+    <div class="serie-detalle">
+        <img src="{{ serie.imagen.url }}" alt="Imagen de {{ serie.titulo }}">
+        <div>
+            <h1>{{ serie.titulo }}</h1>
+            <p>{{ serie.descripcion }}</p>
+            <p><strong>Géneros:</strong> {{ serie.generos.all|join:', ' }}</p>
             <p><strong>Temporadas:</strong> {{ serie.temporada }}</p>
             <p><strong>Reparto:</strong> {{ serie.reparto }}</p>
-
-            {% if serie.imagen %}
-                <div class="text-center mt-4">
-                    <img src="{{ serie.imagen.url }}" 
-                         alt="Imagen de {{ serie.titulo }}" 
-                         class="img-fluid rounded shadow-lg"
-                         style="max-height: 400px; object-fit: cover;">
-                </div>
+            <p><strong>Donde ver: </strong> {{ serie.plataformas|join:', ' }}</p>
+            <div class="botonera">
+            {% if user.is_superuser %}
+                <a href="{% url 'Series:serie_update' id=serie.id %}" class="boton actualizar">Actualizar</a>
+                <a href="{% url 'Series:serie_delete' id=serie.id %}" class="boton eliminar">Eliminar</a>
             {% else %}
-                <p class="text-muted text-center mt-2">No hay imagen disponible.</p>
+                <form method="post" action="{% url 'Series:serie_save' id=serie.id %}" class="d-inline">
+                    {% csrf_token %}
+                    {% if serie.id in series_guardadas_ids %}
+                        <button type="submit" class="boton desguardar">Desguardar</button>
+                    {% else %}
+                        <button type="submit" class="boton guardar">Guardar</button>
+                    {% endif %}
+                </form>
             {% endif %}
-        </div>
-    </div>
-
-    <!-- SECCIÓN DE OPINIONES -->
-    <div class="mt-5">
-        <h2 class="text-light text-center mb-4">Opiniones de la serie</h2>
-
-        {% if opiniones %}
-            <div class="row">
-                {% for opinion in opiniones %}
-                    <div class="col-md-6 mb-4">  <!-- Se agregó mb-4 para espacio entre tarjetas -->
-                        <div class="card mb-3 shadow d-flex flex-column" style="height: 100%;">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <h5 class="card-title">
-                                    <a href="{% url 'Login:perfil' opinion.usuario.username %}" style="text-decoration: none; color: #495057;">
-                                        <h5 class="card-title">{{ opinion.usuario.username }}</h5>
-                                    </a>
-                                </h5>
-                                <p class="card-text">{{ opinion.opinion }}</p>
-                                <p class="text-warning">⭐ {{ opinion.estrellas }} / 5</p>
-                                {% if user == opinion.usuario or user.is_superuser %}
-                                    <form action="{% url 'Series:borrar_opinion' opinion.pk %}" method="post" class="mt-2">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger btn-sm w-100">🗑️ Borrar Opinión</button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
-        {% else %}
-            <p class="text-muted text-center">No hay opiniones todavía.</p>
-        {% endif %}
-    </div>
-
-    <div class="card shadow-lg mt-5 border-0">
-        <div class="card-body">
-            <h3 class="text-center text-primary">Deja tu opinión</h3>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label class="form-label">Tu Opinión:</label>
-                    {{ form_opinion.opinion }}
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Estrellas:</label>
-                    {{ form_opinion.estrellas }}
-                </div>
-                <button type="submit" class="btn btn-primary w-100">📩 Enviar Opinión</button>
-            </form>
         </div>
     </div>
+</div>
 
-    <div>
-        <button onclick="window.history.back()" class="btn btn-primary boton-fijo">Volver</button>
-    </div>
+<div class="opiniones-container">
+    <h2 class="text-center">Opiniones de la serie</h2>
+    {% if opiniones %}
+        <div>
+            {% for opinion in opiniones %}
+                <div class="card-opinion">
+                    <a href="{% url 'Login:perfil' opinion.usuario.username %}" class="user-opinion">{{ opinion.usuario.username }}</a>
+                    <p>{{ opinion.opinion }}</p>
+                    <p>⭐ {{ opinion.estrellas }} / 5</p>
+                    {% if user == opinion.usuario or user.is_superuser %}
+                        <form action="{% url 'Series:borrar_opinion' opinion.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">🗑️ Borrar Opinión</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No hay opiniones todavía.</p>
+    {% endif %}
+</div>
+
+<div class="mt-5">
+    <h3 class="text-center text-light">Deja tu opinión</h3>
+    <form method="POST" >
+        {% csrf_token %}
+        <div class="mb-3">
+
+            {{ form_opinion.opinion }}
+        </div>
+        <div class="mb-3">
+
+            <div class="stars-container">
+                {{ form_opinion.estrellas }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">📩 Enviar Opinión</button>
+    </form>
+</div>    
+<div>
+    <a href="{% url 'Main:home' %}" class="btn btn-primary boton-fijo">Volver</a>
 </div>
 
 {% endblock %}

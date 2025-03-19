@@ -1,0 +1,148 @@
+{% extends 'Main/base.html' %}
+
+{% block title_content %}
+🌟 Mi Red 🌟
+{% endblock title_content %}
+
+{% block content %}
+
+<style>
+    body {
+        background-color: #121212;
+        font-family: Arial, sans-serif;
+        color: white;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 28px;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    p {
+        text-align: center;
+        font-size: 16px;
+        color: #cccccc;
+    }
+
+    .seguido-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #292929;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .seguido-item:hover {
+        background: #373737;
+    }
+
+    .seguido-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .seguido-info img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid #8a2be2;
+        margin-right: 15px;
+    }
+
+    .seguido-info a {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .seguido-info a:hover {
+        color: #8a2be2;
+    }
+
+    .opiniones-container {
+        margin-left: 75px;
+        margin-top: 10px;
+    }
+
+    .opinion-card {
+        background: #1c1c1c;
+        border-left: 4px solid #8a2be2;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .opinion-card p {
+        margin: 5px 0;
+        color: #d1d1d1;
+    }
+
+    .opinion-card strong {
+        color: #ffffff;
+    }
+
+    .no-opiniones {
+        color: #888888;
+        font-style: italic;
+        font-size: 14px;
+        margin-left: 75px;
+    }
+</style>
+
+<div class="container">
+    <p>En esta sección verá opiniones sobre series de los usuarios que sigue.</p>
+
+    <ul>
+        {% for seguido in seguidos %}
+        <li class="seguido-item">
+            <div class="seguido-info">
+                <img src="https://i.pravatar.cc/60?u={{ seguido.sigue.username }}">
+                <a href="{% url 'Login:perfil' seguido.sigue.username %}">{{ seguido.sigue }}</a>
+            </div>
+        </li>
+
+        <div class="opiniones-container">
+            {% for opinion in opiniones_seguidos %}
+                {% if opinion.usuario == seguido.sigue %}
+                    <div class="opinion-card">
+                        
+                        <a href="{% url 'Series:serie_details' id=opinion.serie.id %}" style="text-decoration:  none;"><p><strong>📺 Serie:</strong> {{ opinion.serie }}</p></a>
+                        <p><strong>⭐ Estrellas:</strong> {{ opinion.estrellas }} / 5</p>
+                        <p>"{{ opinion.opinion }}"</p>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+            {% if not opinion.serie %}
+                <p class="no-opiniones">Este usuario no ha publicado opiniones aún.</p>
+            {% endif %}
+        </div>
+        
+        {% empty %}
+            {% if user.username == usuario_perfil.username %}
+                <p class="text-gray-400 text-center text-xl py-8">No sigues a nadie aún.</p>
+            {% else %}
+                <p class="text-gray-400 text-center text-xl py-8">{{ usuario_perfil }} no sigue a nadie aún.</p>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock content %}

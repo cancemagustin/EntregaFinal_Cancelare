@@ -1,3 +1,13 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}
+    Lista de Series
+{% endblock title %}
+
+{% block title_content %}
+{% endblock title_content %}
+
+{% block content %}
 <style>
 .serie_contenedor {
     display: flex;
@@ -74,13 +84,9 @@
     background-color: rgb(0, 65, 65);
 }
 
-.actualizar {
-    background-color: rgb(97, 0, 0);
-}
+.boton.actualizar{background-color: rgb(27, 4, 160); text-decoration: none;}
 
-.eliminar {
-    background-color: rgb(20, 0, 0);
-}
+.boton.eliminar{background-color: rgb(110, 0, 0); text-decoration: none;}
 
 .guardar {
     background-color: rgb(0, 24, 66);
@@ -96,20 +102,9 @@
     right: 40px;   
     z-index: 1000; 
 }
-
     
 </style>
 
-{% extends 'Main/base.html' %}
-
-{% block title %}
-    Lista de Series
-{% endblock title %}
-
-{% block title_content %}
-{% endblock title_content %}
-
-{% block content %}
     <div class="container my-5">
         <div class="d-flex align-items-center mb-4" style="justify-content: center;">
             <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex w-75">
@@ -138,7 +133,6 @@
                         <div class="titulo-serie">{{ serie.titulo }}</div>
                     </div>
         
-                    <!-- Mueve la botonera afuera del serie_contenedor -->
                     <div class="botonera">
                         {% if user.is_superuser %}
                             <a href="{% url 'Series:serie_update' id=serie.id %}" class="boton actualizar">Actualizar</a>

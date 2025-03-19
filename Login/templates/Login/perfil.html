@@ -158,8 +158,8 @@
 
         <!-- Sección de Seguidores / Siguiendo -->
         <div class="perfil-stats">
-            <a href="{% url 'Friends:lista_seguidores' %}">👥 Seguidores</a>
-            <a href="{% url 'Friends:lista_seguidos' %}">✅ Siguiendo</a>
+            <a href="{% url 'Friends:lista_seguidores' usuario.username %}">👥 Seguidores</a>
+            <a href="{% url 'Friends:lista_seguidos' usuario.username%}">✅ Siguiendo</a>
         </div>
         
         <table class="perfil-info">
@@ -190,7 +190,10 @@
                 </tr>
             </tbody>
         </table>
-        <a href="{% url 'Login:edit_profile'  %}">Editar perfil</a>
+        {% if user.is_authenticated and user.username == usuario.username%}
+            <a href="{% url 'Login:edit_profile'  %}">Editar perfil</a>
+        {% endif %}
+        
     </div>
 
     <div class="opiniones-container">

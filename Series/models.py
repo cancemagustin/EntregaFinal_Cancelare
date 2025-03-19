@@ -10,8 +10,8 @@ class Generos(models.Model):
     def __str__(self):
         return self.genero
 
-class Serie(models.Model):
 
+class Serie(models.Model):
     PLATAFORMA_CHOICES = [
         ('flow', 'Flow'),
         ('disney_plus', 'Disney Plus'),
@@ -20,15 +20,17 @@ class Serie(models.Model):
         ('paramount', 'Paramount'),
         ('apple_tv', 'Apple TV'),
         ('netflix', 'Netflix'),
+        ('Youtube TV', 'Youtube TV'),
     ]
-    titulo = models.CharField(max_length=200)  
-    descripcion = models.TextField()    
-    generos = models.ManyToManyField(Generos, through='SerieGenero')
+    
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(blank=True, null=True)  
+    generos = models.ManyToManyField('Generos', through='SerieGenero', blank=True)  
     fecha_lanzamiento = models.DateTimeField(auto_now_add=True)  
-    reparto = models.CharField(max_length=255, default="Desconocido")
-    temporada = models.IntegerField() 
-    plataformas = MultiSelectField(choices=PLATAFORMA_CHOICES)
-    imagen = models.ImageField(upload_to='Series/', blank=True)
+    reparto = models.CharField(max_length=255, default="Desconocido", blank=True, null=True)  
+    temporada = models.IntegerField(blank=True, null=True) 
+    plataformas = MultiSelectField(choices=PLATAFORMA_CHOICES, blank=True, null=True) 
+    imagen = models.ImageField(upload_to='Series/', blank=True, null=True) 
     
     def __str__(self):
         return self.titulo

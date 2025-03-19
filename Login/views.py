@@ -38,7 +38,7 @@ def perfil(request, username=None):
     if username:
         usuario = get_object_or_404(CustomUser, username=username)
     else:
-        usuario = request.user  # Si no se pasa username, se usa el usuario autenticado
+        usuario = request.user 
     
     opiniones = Opinion_serie.objects.filter(usuario=usuario)
     sigue = seguidos.objects.filter(seguidor=request.user, sigue=usuario).exists()

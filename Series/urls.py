@@ -15,6 +15,7 @@ urlpatterns = [
     path('serie/save/<int:id>/', views.serie_save, name='serie_save'),
     path('saved/', views.serie_saved_list, name='serie_saved_list'),
     path('opinion/<int:id>/borrar/', views.borrar_opinion, name='borrar_opinion'),
+    path('serie/<str:genero_nombre>/', views.genero_list, name='genero_list'), 
 
 
 

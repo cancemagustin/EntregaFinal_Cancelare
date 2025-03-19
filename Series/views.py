@@ -76,6 +76,12 @@ class SerieDetailView(DetailView):
         serie = self.get_object()
         context['form_opinion'] = OpinionSerieForm()
         context['opiniones'] = Opinion_serie.objects.filter(serie=serie)
+        if self.request.user.is_authenticated:
+            context['series_guardadas_ids'] = list(
+                SerieGuardada.objects.filter(usuario=self.request.user).values_list('serie_id', flat=True)
+            )
+        else:
+            context['series_guardadas_ids'] = []
         return context
 
     def post(self, request, *args, **kwargs):
@@ -102,6 +108,8 @@ class SerieDetailView(DetailView):
             return redirect('Series:serie_details', id=serie.id)
 
         return self.render_to_response({'form_opinion': form_opinion})
+    
+    
 
 @login_required
 def borrar_opinion(request, id):
@@ -145,3 +153,13 @@ def serie_saved_list(request):
     return render(request, 'Series/serie_saved_list.html', {'series_guardadas': series_guardadas})
 
 
+
+def genero_list(request, genero_nombre):
+    genero = get_object_or_404(Generos, genero=genero_nombre)
+    series = Serie.objects.filter(generos=genero).order_by('titulo')
+
+    context = {
+        "genero": genero,
+        "series": series
+    }
+    return render(request, 'Series/serie_list_genero.html', context)
