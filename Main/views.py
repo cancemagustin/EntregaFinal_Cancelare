@@ -6,9 +6,6 @@ import random
 
 # Create your views here.
 
-def index(request):
-    return render(request, 'Main/index.html')
-
 def home(request):
     series = Serie.objects.all()
 

@@ -18,7 +18,7 @@
 <body style="background-color: #000000; ">
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top" style="background-color: #343a40;">
     <div class="container-fluid" style="padding-right: 40px; padding-left: 100px;">
-        <a class="navbar-brand fw-bold text-primary text-white" href="{% url 'Main:home' %}">Sitio</a>
+        <a class="navbar-brand fw-bold text-primary text-white" style="font-size:25px" href="{% url 'Main:home' %}">PILOTÓN</a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,7 +32,7 @@
                 <li class="nav-item me-3">
                     <form method="get" action="{% url 'Series:serie_list' %}" class="d-flex">
                         <input type="text" name="busqueda" placeholder="Buscar serie" value="{{ request.GET.busqueda }}" style="border-radius: 20px; padding-left: 15px;">
-                        <button type="submit" class="btn" style="border-radius: 20px; background-color: rgb(255, 255, 255);">
+                        <button type="submit" class="btn" style="border-radius: 20px; background-color: rgb(255, 255, 255); margin-left:10px;">
                             <img src="{% get_media_prefix %}logos/lupa.png" alt="" height="15px" width="15px">
                         </button>
                     </form>    
